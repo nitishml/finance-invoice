@@ -10,8 +10,8 @@ export const metadata: Metadata = {
 };
 
 export default async function AppPage() {
-    // const session = await getSession();
-    // if (!session) return redirect('/auth/login');
+    const session = await getSession();
+    if (!session) return redirect('/auth/login');
 
     return (
         <Page.Root>

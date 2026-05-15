@@ -17,6 +17,7 @@ import { FileText, Home, LifeBuoy, FileChartPie, UsersRound, MailCheck } from "l
 import { SidebarModeToggle } from "@/components/mode-toggle"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { NavUser } from "./nav-user"
 
 const routes = [
     {
@@ -49,7 +50,8 @@ const routes = [
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const { setOpen } = useSidebar()
 
-    const route = usePathname().split("/").slice(0, 4).join("/")
+    const route = "/" + usePathname().split("/").slice(0, 4)[1] // check for the first route under main routes
+    //console.log("route: ", route)
     return (
         <Sidebar collapsible="icon" {...props} className="text-white ">
             <SidebarHeader>
@@ -93,14 +95,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarContent>
             <SidebarFooter>
                 <SidebarMenu>
-                    <SidebarMenuItem >
-                        <SidebarMenuButton tooltip={"Support"} asChild>
-                            <a href={"/user/support"}>
-                                <LifeBuoy />
-                                <span>{"Support"}</span>
-                            </a>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
+                    <NavUser />
                     <SidebarMenuItem >
                         <SidebarModeToggle />
                     </SidebarMenuItem>

@@ -18,11 +18,12 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/no-unused-vars": "off",
       "@typescript-eslint/no-empty-object-type": "off",
       "@typescript-eslint/no-explicit-any": "off",
-      "react/no-unescaped-entities": "off",
       "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
-      "prefer-const": "off",
       "@typescript-eslint/ban-ts-comment": "off",
-      "react-hooks/exhaustive-deps": "off"
+      "react-hooks/exhaustive-deps": "off",
+      "react-hooks/incompatible-library": "off",
+      "react/no-unescaped-entities": "off",
+      "prefer-const": "off",
     },
   },
 ]);

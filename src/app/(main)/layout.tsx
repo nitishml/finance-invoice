@@ -12,8 +12,8 @@ export default async function TeacherLayout({
     const cookieStore = await cookies()
     const defaultOpen = cookieStore.get("sidebar_state")?.value === "true"
 
-    // const session = await getSession();
-    // if (!session) return redirect("/auth/login")
+    const session = await getSession();
+    if (!session) return redirect("/auth/login")
 
     return (
         <SidebarProvider defaultOpen={defaultOpen} className="min-h-screen w-full h-full">

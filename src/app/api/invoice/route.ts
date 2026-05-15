@@ -1,9 +1,9 @@
 import { db } from "@/db/drizzle";
-import { count, desc } from "drizzle-orm";
+import { count, desc, eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
-import { contact } from "@/db/schema";
+import { contact, invoice } from "@/db/schema";
 import { getSession } from "@/features/auth/get-session";
-import { addContactApiSchema } from "@/features/contact/types";
+import { addInvoiceApiSchema } from "@/features/invoice/types";
 
 export async function GET(request: NextRequest) {
     try {
@@ -19,30 +19,39 @@ export async function GET(request: NextRequest) {
         const limit = parseInt(searchParams.get('limit') || '50');
         const offset = (page - 1) * limit;
 
-        const [contacts, total] = await Promise.all([
+        const [invoices, total] = await Promise.all([
             db
                 .select({
-                    id: contact.id,
+                    id: invoice.id,
+                    status: invoice.status,
+                    account: invoice.account,
+                    total: invoice.total,
+
+                    expectedPaymentDate: invoice.expectedPaymentDate,
+                    paymentDate: invoice.paymentDate,
+                    createdDate: invoice.createdAt,
+                    cancelledDate: invoice.cancelledDate,
+
                     name: contact.name,
                     slug: contact.slug,
-                    mobile: contact.mobile,
-                    city: contact.city,
+
                 })
-                .from(contact)
-                .orderBy(desc(contact.createdAt))
+                .from(invoice)
+                .innerJoin(contact, eq(contact.id, invoice.contactId))
+                .orderBy(desc(invoice.createdAt))
                 .limit(limit)
                 .offset(offset),
 
             db
                 .select({ count: count() })
-                .from(contact)
+                .from(invoice)
         ]);
 
         return NextResponse.json(
             {
                 success: true,
                 data: {
-                    contacts,
+                    invoices,
                     pagination: {
                         page,
                         limit,
@@ -73,7 +82,7 @@ export async function POST(request: NextRequest) {
         // }, { status: 401 });
 
         const body = await request.json();
-        const validatedData = addContactApiSchema.safeParse(body);
+        const validatedData = addInvoiceApiSchema.safeParse(body);
 
         if (!validatedData.success) return NextResponse.json({
             success: false,
@@ -83,34 +92,44 @@ export async function POST(request: NextRequest) {
 
         const values = validatedData.data
 
-        const [newContact] = await db
-            .insert(contact)
+        const [newInvoice] = await db
+            .insert(invoice)
             .values({
-                ...values
+                contactId: values.contactId,
+                handledBy: "",
+                account: values.account,
+                status: "DRAFT",
+
+                price: values.price,
+                taxAmount: values.taxAmount,
+                gstAmount: values.gstAmount,
+                total: values.total,
+
+                expectedPaymentDate: values.expectedPaymentDate
 
             })
             .returning({
                 id: contact.id
             })
 
-        if (!newContact) return NextResponse.json({
+        if (!newInvoice) return NextResponse.json({
             success: false,
-            message: "Contact Addition Failed",
+            message: "Invoice Creation Failed",
             data: null,
         }, { status: 404 });
 
         return NextResponse.json(
             {
                 success: true,
-                message: "Contact Added Successfully",
+                message: "Invoice Created Successfully",
                 data: {
-                    id: newContact.id,
+                    id: newInvoice.id,
                 },
             },
             { status: 200 }
         );
     } catch (error) {
-        console.error('Error creating new contact: ', error);
+        console.error('Error creating invoice: ', error);
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 }
