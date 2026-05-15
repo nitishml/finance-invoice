@@ -13,7 +13,7 @@ import {
     useSidebar,
 } from "@/components/ui/sidebar"
 import Image from "next/image"
-import { Home, LifeBuoy, ListChecks, UsersRound } from "lucide-react"
+import { FileText, Home, LifeBuoy, FileChartPie, UsersRound, MailCheck } from "lucide-react"
 import { SidebarModeToggle } from "@/components/mode-toggle"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -27,12 +27,22 @@ const routes = [
     {
         title: "Invoices",
         url: `/invoices`,
-        icon: ListChecks
+        icon: FileText
     },
     {
         title: "Customers",
         url: `/customers`,
         icon: UsersRound
+    },
+    {
+        title: "Quotations",
+        url: `/quotations`,
+        icon: MailCheck
+    },
+    {
+        title: "Statements",
+        url: `/statements`,
+        icon: FileChartPie
     },
 ]
 
@@ -41,7 +51,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
     const route = usePathname().split("/").slice(0, 4).join("/")
     return (
-        <Sidebar variant="inset" collapsible="icon" {...props} className="text-white ">
+        <Sidebar collapsible="icon" {...props} className="text-white ">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
