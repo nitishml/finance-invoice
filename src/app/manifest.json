@@ -1,0 +1,42 @@
+{
+    "id": "/",
+    "scope": "/",
+    "start_url": "/",
+    "name": "GS Finance",
+    "short_name": "GS-FIN",
+    "description": "Finance and Invoice Management system by Growsharp Technologies Pvt. Ltd.",
+    "theme_color": "#022222",
+    "background_color": "#022222",
+    "display": "standalone",
+    "orientation": "any",
+    "dir": "ltr",
+    "lang": "en",
+    "related_applications": [],
+    "prefer_related_applications": false,
+    "display_override": [
+        "window-controls-overlay"
+    ],
+    "launch_handler": {
+        "client_mode": "focus-existing"
+    },
+    "icons": [
+        {
+            "src": "/pwa/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/pwa/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any"
+        },
+        {
+            "src": "/pwa/icon-512-maskable.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ]
+}

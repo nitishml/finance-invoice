@@ -1,0 +1,102 @@
+"use client"
+
+import * as React from "react"
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarGroup,
+    SidebarHeader,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    useSidebar,
+} from "@/components/ui/sidebar"
+import Image from "next/image"
+import { Home, LifeBuoy, ListChecks, UsersRound } from "lucide-react"
+import { SidebarModeToggle } from "@/components/mode-toggle"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+
+const routes = [
+    {
+        title: "Dashboard",
+        url: `/teacher`,
+        icon: Home
+    },
+    {
+        title: "Profile",
+        url: `/teacher/profile`,
+        icon: UsersRound
+    },
+    {
+        title: "Attendance",
+        url: `/teacher/attendance`,
+        icon: ListChecks
+    },
+]
+
+export function TeacherSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+    const { setOpen } = useSidebar()
+
+    const route = usePathname().split("/").slice(0, 4).join("/")
+    return (
+        <Sidebar variant="inset" collapsible="icon" {...props} className="text-white ">
+            <SidebarHeader>
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton size="lg">
+                            <div className=" flex aspect-square size-8 items-center justify-center rounded-lg">
+                                <Image
+                                    src={'/logo.png'}
+                                    height={32}
+                                    width={32}
+                                    alt="logo"
+                                />
+                            </div>
+                            <div className="flex-1 text-left">
+                                <span className="truncate font-bold  text-2xl leading-tight">
+                                    GS-FIN
+                                </span>
+                            </div>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SidebarHeader>
+            <SidebarContent>
+                <SidebarGroup className="">
+                    <SidebarMenu>
+                        {routes.map((item, idx) => (
+                            <SidebarMenuItem key={idx} >
+                                <SidebarMenuButton tooltip={item.title} isActive={item.url === route} asChild>
+                                    <Link href={item.url} onClick={() => setOpen(false)}>
+                                        <item.icon />
+                                        <span>{item.title}</span>
+                                    </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        ))}
+
+                    </SidebarMenu>
+                </SidebarGroup>
+
+            </SidebarContent>
+            <SidebarFooter>
+                <SidebarMenu>
+                    <SidebarMenuItem >
+                        <SidebarMenuButton tooltip={"Support"} asChild>
+                            <a href={"/user/support"}>
+                                <LifeBuoy />
+                                <span>{"Support"}</span>
+                            </a>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem >
+                        <SidebarModeToggle />
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </SidebarFooter>
+        </Sidebar>
+    )
+
+}

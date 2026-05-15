@@ -6,6 +6,7 @@ import { QueryProvider } from "@/components/providers/query-provider";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "@/components/ui/sonner";
 import { Roboto_Mono } from "next/font/google"
+import { TooltipProvider } from "@/components/ui/tooltip"
 
 const font = Roboto_Mono({
   subsets: ["latin"]
@@ -48,7 +49,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0E0C26",
+  themeColor: "#022222",
 };
 
 export default function RootLayout({
@@ -72,7 +73,9 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <QueryProvider>
-            {children}
+            <TooltipProvider>
+              {children}
+            </TooltipProvider>
             <ReactQueryDevtools />
             <Toaster position="top-center" richColors closeButton />
           </QueryProvider>
