@@ -30,8 +30,8 @@ const routes = [
         icon: FileText
     },
     {
-        title: "Customers",
-        url: `/customers`,
+        title: "Contacts",
+        url: `/contacts`,
         icon: UsersRound
     },
     {

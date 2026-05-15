@@ -1,20 +1,20 @@
 import { useQuery } from "@tanstack/react-query";
-import { CustomerDetails } from "./types";
+import { ContactDetails } from "./types";
 
 type ApiResponse = {
     success: boolean;
-    data: CustomerDetails | null;
+    data: ContactDetails | null;
     message?: string;
 }
 
 type ApiRequest = {
-    customerId: string;
+    contactId: string;
 }
 
-async function fetchCustomerDetails({
-    customerId,
+async function fetchContactDetails({
+    contactId,
 }: ApiRequest): Promise<ApiResponse> {
-    const response = await fetch(`/api/customer/manage/${customerId}`, {
+    const response = await fetch(`/api/contact/manage/${contactId}`, {
         method: 'GET',
         credentials: 'include',
         headers: {
@@ -30,12 +30,12 @@ async function fetchCustomerDetails({
     return response.json();
 }
 
-export function useGetCustomerDetails({
-    customerId,
+export function useGetContactDetails({
+    contactId,
 }: ApiRequest) {
     return useQuery({
-        queryKey: ['customer', customerId],
-        queryFn: () => fetchCustomerDetails({ customerId }),
+        queryKey: ['contact', contactId],
+        queryFn: () => fetchContactDetails({ contactId }),
         staleTime: 1000 * 60 * 5,
         gcTime: 1000 * 60 * 10,
         refetchOnWindowFocus: false,

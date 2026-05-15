@@ -20,10 +20,10 @@ import { Button } from "@/components/ui/button"
 import { ArrowUpDown, Edit } from "lucide-react"
 import Link from "next/link"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { CustomerListItem } from "./types"
+import { ContactListItem } from "./types"
 
 interface Props {
-    customers: CustomerListItem[];
+    contacts: ContactListItem[];
     total: number;
     page: number
     limit: number
@@ -31,17 +31,17 @@ interface Props {
     setLimit: (limit: number) => void
 }
 
-export function CustomersTable({ customers, total, page, limit, setPage, setLimit }: Props) {
+export function ContactsTable({ contacts, total, page, limit, setPage, setLimit }: Props) {
 
-    const data = React.useMemo<CustomerListItem[]>(
+    const data = React.useMemo<ContactListItem[]>(
         () =>
-            customers.map(c => ({
+            contacts.map(c => ({
                 ...c,
             })),
-        [customers]
+        [contacts]
     )
 
-    const columns: ColumnDef<CustomerListItem>[] = [
+    const columns: ColumnDef<ContactListItem>[] = [
         {
             accessorKey: "name",
             header: ({ column }) => (
@@ -84,7 +84,7 @@ export function CustomersTable({ customers, total, page, limit, setPage, setLimi
             cell: ({ row }) => (
                 <Button variant="view_item" size="sm" className="" asChild>
                     <Link
-                        href={`/customers/manage/${row.original.id}`}
+                        href={`/contacts/manage/${row.original.id}`}
                         prefetch={false}>
                         <Edit className="w-4 h-4" />
                         View

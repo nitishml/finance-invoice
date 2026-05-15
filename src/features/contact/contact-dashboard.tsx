@@ -1,8 +1,8 @@
 "use client"
 import { DataError, QueryLoading } from "@/components/custom-loaders";
 import { parseAsInteger, useQueryState } from "nuqs";
-import { useGetCustomers } from "./useGetCustomers";
-import { CustomersTable } from "./customers-table";
+import { useGetContacts } from "./useGetContacts";
+import { ContactsTable } from "./contacts-table";
 import {
     Stat,
     StatIndicator,
@@ -13,11 +13,11 @@ import { Download, UserPlus, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-export const CustomerDashboard = () => {
+export const ContactDashboard = () => {
     const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1))
     const [limit, setLimit] = useQueryState('limit', parseAsInteger.withDefault(25))
 
-    const query = useGetCustomers({
+    const query = useGetContacts({
         page,
         limit,
     })
@@ -43,9 +43,9 @@ export const CustomerDashboard = () => {
                         Export CSV
                     </Button>
                     <Button className="w-full h-14" asChild>
-                        <Link href={`/customers/onboard`}>
+                        <Link href={`/contacts/add`}>
                             <UserPlus />
-                            Add Customer
+                            Add Contact
                         </Link>
                     </Button>
                 </div>
@@ -53,8 +53,8 @@ export const CustomerDashboard = () => {
 
                 </Stat>
             </div>
-            <CustomersTable
-                customers={data.customers}
+            <ContactsTable
+                contacts={data.contacts}
                 total={data.pagination.total}
                 page={data.pagination.page}
                 limit={data.pagination.limit}

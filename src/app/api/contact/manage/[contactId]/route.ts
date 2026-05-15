@@ -1,16 +1,16 @@
 import { db } from "@/db/drizzle";
-import { customer } from "@/db/schema";
+import { contact } from "@/db/schema";
 import { getSession } from "@/features/auth/get-session";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: Promise<{ customerId: string }> }
+    { params }: { params: Promise<{ contactId: string }> }
 ) {
     try {
-        const { customerId } = await params
-        if (!customerId) return NextResponse.json({
+        const { contactId } = await params
+        if (!contactId) return NextResponse.json({
             success: false,
             message: "Bad Request",
             data: null,
@@ -25,22 +25,22 @@ export async function GET(
 
         const [data] = await db
             .select({
-                id: customer.id,
-                name: customer.name,
-                slug: customer.slug,
+                id: contact.id,
+                name: contact.name,
+                slug: contact.slug,
 
-                mobile: customer.mobile,
-                email: customer.email,
-                gstin: customer.gstin,
+                mobile: contact.mobile,
+                email: contact.email,
+                gstin: contact.gstin,
 
-                address: customer.address,
-                zipcode: customer.zipcode,
-                city: customer.city,
-                state: customer.state,
-                country: customer.country,
+                address: contact.address,
+                zipcode: contact.zipcode,
+                city: contact.city,
+                state: contact.state,
+                country: contact.country,
             })
-            .from(customer)
-            .where(eq(customer.id, customerId))
+            .from(contact)
+            .where(eq(contact.id, contactId))
 
         if (!data) return NextResponse.json({
             success: false,
@@ -56,7 +56,7 @@ export async function GET(
             { status: 200 }
         );
     } catch (error) {
-        console.error('Error fetching customer by id: ', error);
+        console.error('Error fetching contact by id: ', error);
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 }

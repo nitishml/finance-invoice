@@ -1,12 +1,12 @@
 import { relations } from "drizzle-orm";
 import { boolean, index, integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
-import { user, customer, accountEnum, invoiceStatusEnum, invoiceItem } from "./";
+import { user, accountEnum, invoiceStatusEnum, invoiceItem, contact } from "./";
 import { createId } from "@/lib/nanoid-gen";
 
 export const invoice = pgTable("invoice", {
     id: text("id").primaryKey().$defaultFn(() => createId()),
     handledBy: text("handled_by").notNull().references(() => user.id),
-    customerId: text("customer_id").notNull().references(() => customer.id),
+    contactId: text("contact_id").notNull().references(() => contact.id),
 
     account: accountEnum("account").notNull(),
     status: invoiceStatusEnum("status").notNull(),
@@ -36,7 +36,7 @@ export const invoice = pgTable("invoice", {
         .$onUpdate(() => /* @__PURE__ */ new Date())
         .notNull(),
 }, (table) => [
-    index("idx_inv_customer").on(table.customerId),
+    index("idx_inv_contact").on(table.contactId),
     index("idx_inv_serial").on(table.serialNumber),
     index("idx_inv_account").on(table.account),
     index("idx_inv_status").on(table.status),
@@ -51,9 +51,9 @@ export const invoiceRelations = relations(invoice, ({ one, many }) => ({
         fields: [invoice.handledBy],
         references: [user.id],
     }),
-    customer: one(customer, {
-        fields: [invoice.customerId],
-        references: [customer.id],
+    contact: one(contact, {
+        fields: [invoice.contactId],
+        references: [contact.id],
     }),
     items: many(invoiceItem)
 }));

@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import { PaginationResponse } from "@/types/generic-props";
-import { CustomerListItem } from "./types";
+import { ContactListItem } from "./types";
 
 type ApiResponse = {
     success: boolean;
     data: {
-        customers: CustomerListItem[],
+        contacts: ContactListItem[],
         pagination: PaginationResponse
     } | null;
     message?: string;
@@ -16,7 +16,7 @@ type ApiRequest = {
     limit?: number;
 }
 
-async function fetchCustomers({
+async function fetchContacts({
     page = 1,
     limit = 25,
 }: ApiRequest): Promise<ApiResponse> {
@@ -25,7 +25,7 @@ async function fetchCustomers({
         limit: limit.toString(),
     });
 
-    const response = await fetch(`/api/customer?${params.toString()}`, {
+    const response = await fetch(`/api/contact?${params.toString()}`, {
         method: 'GET',
         credentials: 'include',
         headers: {
@@ -42,13 +42,13 @@ async function fetchCustomers({
     return data
 }
 
-export function useGetCustomers({
+export function useGetContacts({
     page = 1,
     limit = 25,
 }: ApiRequest) {
     return useQuery({
-        queryKey: ['customers', { page, limit }],
-        queryFn: () => fetchCustomers({
+        queryKey: ['contacts', { page, limit }],
+        queryFn: () => fetchContacts({
             page,
             limit,
         }),

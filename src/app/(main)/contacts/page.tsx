@@ -1,12 +1,12 @@
 import { Page } from "@/components/layout/page";
 import { getSession } from "@/features/auth/get-session";
-import { AddCustomerForm } from "@/features/customer/add-customer-form";
+import { ContactDashboard } from "@/features/contact/contact-dashboard";
 import { Metadata } from "next";
 import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
-    title: "Onboard Customer",
-    description: "Customers Dashboard",
+    title: "Contacts",
+    description: "Contacts Dashboard",
 };
 
 export default async function AppPage() {
@@ -15,9 +15,9 @@ export default async function AppPage() {
 
     return (
         <Page.Root>
-            <Page.Header title="Onboard Customers" />
+            <Page.Header title="Contacts" />
             <Page.Main className=" max-w-7xl py-20 md:pt-0">
-                <AddCustomerForm />
+                <ContactDashboard />
             </Page.Main>
         </Page.Root>
     );

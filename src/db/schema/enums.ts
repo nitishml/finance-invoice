@@ -6,8 +6,15 @@ export const accountEnum = pgEnum('account_enum', [
 ]);
 
 export const invoiceStatusEnum = pgEnum('invoice_status_enum', [
-    'CREATED',
+    'DRAFT',
+    'EXPECTED',
     'PAID',
     'ARREARED',
     'CANCELLED'
+]);
+
+
+export const contactCategoryEnum = pgEnum('contact_category_enum', [
+    'VENDOR',
+    'INDUVIDUAL',
 ]);

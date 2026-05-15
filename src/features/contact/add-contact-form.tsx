@@ -26,16 +26,16 @@ import { useRouter } from "next/navigation"
 import { Textarea } from "@/components/ui/textarea"
 import { InPageHeader } from "@/components/layout/in-page-header"
 import { QueryLoading } from "@/components/custom-loaders"
-import { addCustomerFormSchema } from "./types"
-import { useAddCustomer } from "./useAddCustomer"
+import { addContactFormSchema } from "./types"
+import { useAddContact } from "./useAddContact"
 
-export function AddCustomerForm() {
-    const mutation = useAddCustomer()
+export function AddContactForm() {
+    const mutation = useAddContact()
     const [isLoading, setLoading] = useState(false)
     const router = useRouter()
 
-    const form = useForm<z.infer<typeof addCustomerFormSchema>>({
-        resolver: zodResolver(addCustomerFormSchema),
+    const form = useForm<z.infer<typeof addContactFormSchema>>({
+        resolver: zodResolver(addContactFormSchema),
         defaultValues: {
             city: "Bengaluru",
             state: "KARNATAKA",
@@ -43,7 +43,7 @@ export function AddCustomerForm() {
         }
     })
 
-    function onSubmit(values: z.infer<typeof addCustomerFormSchema>) {
+    function onSubmit(values: z.infer<typeof addContactFormSchema>) {
         //console.log("values:", values)
         setLoading(true)
         mutation.mutate({
@@ -60,8 +60,8 @@ export function AddCustomerForm() {
         }, {
             onSuccess: (data) => {
                 if (data.success && data.data) {
-                    toast.success("Customer Created")
-                    router.push(`/customer/manage/${data.data.id}`)
+                    toast.success("Contact Created")
+                    router.push(`/contacts/manage/${data.data.id}`)
                 }
                 else {
                     toast.error(data.message || "Please try again")
@@ -78,7 +78,7 @@ export function AddCustomerForm() {
     if (isLoading || mutation.isPending) return <QueryLoading />;
     return (
         <div className="w-full flex-1 flex flex-col gap-8 items-start justify-center">
-            <InPageHeader label="Add Customer Form" />
+            <InPageHeader label="Add Contact Form" />
             <form onSubmit={form.handleSubmit(onSubmit)} className=" max-w-6xl  w-full mx-auto">
                 <FieldGroup>
                     <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2">

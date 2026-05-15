@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { AddCustomerDTO } from './types';
+import { AddContactDTO } from './types';
 
 type ApiResponse = {
     success: boolean;
@@ -9,8 +9,8 @@ type ApiResponse = {
     message?: string | null;
 }
 
-const createCustomer = async (formData: AddCustomerDTO): Promise<ApiResponse> => {
-    const response = await fetch(`/api/customer`, {
+const createContact = async (formData: AddContactDTO): Promise<ApiResponse> => {
+    const response = await fetch(`/api/contact`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -25,18 +25,17 @@ const createCustomer = async (formData: AddCustomerDTO): Promise<ApiResponse> =>
     return response.json();
 };
 
-export const useAddCustomer = () => {
+export const useAddContact = () => {
     const queryClient = useQueryClient();
 
-    return useMutation<ApiResponse, Error, AddCustomerDTO>({
-        mutationFn: createCustomer,
+    return useMutation<ApiResponse, Error, AddContactDTO>({
+        mutationFn: createContact,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['customers'] });
-            // queryClient.invalidateQueries({ queryKey: ['active-postings'] });
+            queryClient.invalidateQueries({ queryKey: ['contacts'] });
         },
         onError: (error) => {
             console.error('Form submission failed:', error);
         },
-        mutationKey: ['create-customer'],
+        mutationKey: ['create-contact'],
     });
 };

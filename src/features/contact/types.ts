@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export type AddCustomerDTO = {
+export type AddContactDTO = {
     name: string;
     slug: string;
     mobile: string;
@@ -13,7 +13,7 @@ export type AddCustomerDTO = {
     zipcode: string;
 }
 
-export const addCustomerFormSchema = z.object({
+export const addContactFormSchema = z.object({
     name: z.string(),
     slug: z.string(),
     mobile: z.string(),
@@ -26,7 +26,7 @@ export const addCustomerFormSchema = z.object({
     zipcode: z.string(),
 })
 
-export const addCustomerApiSchema = z.object({
+export const addContactApiSchema = z.object({
     name: z.string(),
     slug: z.string(),
     mobile: z.string(),
@@ -39,7 +39,7 @@ export const addCustomerApiSchema = z.object({
     zipcode: z.string(),
 })
 
-export type CustomerListItem = {
+export type ContactListItem = {
     id: string;
     name: string;
     slug: string;
@@ -47,7 +47,7 @@ export type CustomerListItem = {
     city: string;
 }
 
-export type CustomerDetails = {
+export type ContactDetails = {
     id: string;
     name: string;
     slug: string;

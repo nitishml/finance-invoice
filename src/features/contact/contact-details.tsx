@@ -5,12 +5,12 @@ import { AspectRatio } from '@radix-ui/react-aspect-ratio';
 import { format } from "date-fns";
 import { DataDisplay, SoftDataDisplay } from "@/components/data-display";
 import { DataError, QueryLoading } from "@/components/custom-loaders";
-import { useGetCustomerDetails } from "./useGetCustomerDetails";
+import { useGetContactDetails } from "./useGetContactDetails";
 
 type Props = {
-    customerId: string
+    contactId: string
 }
-export const CustomerDetails = ({ customerId }: Props) => {
+export const ContactDetails = ({ contactId }: Props) => {
     // const actions = [
     //     {
     //         label: 'Attendance',
@@ -28,7 +28,7 @@ export const CustomerDetails = ({ customerId }: Props) => {
     //         icon: <UserRoundCog />,
     //     },
     // ];
-    const query = useGetCustomerDetails({ customerId })
+    const query = useGetContactDetails({ contactId })
 
     const isDisabled = query.isLoading || query.isPending || query.isFetching
     if (isDisabled) return <QueryLoading />

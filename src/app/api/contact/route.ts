@@ -1,9 +1,9 @@
 import { db } from "@/db/drizzle";
 import { count, desc } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
-import { customer } from "@/db/schema";
+import { contact } from "@/db/schema";
 import { getSession } from "@/features/auth/get-session";
-import { addCustomerApiSchema } from "@/features/customer/types";
+import { addContactApiSchema } from "@/features/contact/types";
 
 export async function GET(request: NextRequest) {
     try {
@@ -19,30 +19,30 @@ export async function GET(request: NextRequest) {
         const limit = parseInt(searchParams.get('limit') || '50');
         const offset = (page - 1) * limit;
 
-        const [customers, total] = await Promise.all([
+        const [contacts, total] = await Promise.all([
             db
                 .select({
-                    id: customer.id,
-                    name: customer.name,
-                    slug: customer.slug,
-                    mobile: customer.mobile,
-                    city: customer.city,
+                    id: contact.id,
+                    name: contact.name,
+                    slug: contact.slug,
+                    mobile: contact.mobile,
+                    city: contact.city,
                 })
-                .from(customer)
-                .orderBy(desc(customer.createdAt))
+                .from(contact)
+                .orderBy(desc(contact.createdAt))
                 .limit(limit)
                 .offset(offset),
 
             db
                 .select({ count: count() })
-                .from(customer)
+                .from(contact)
         ]);
 
         return NextResponse.json(
             {
                 success: true,
                 data: {
-                    customers,
+                    contacts,
                     pagination: {
                         page,
                         limit,
@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
         );
 
     } catch (error) {
-        console.error('Error fetching customers: ', error);
+        console.error('Error fetching contacts: ', error);
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 }
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
         // }, { status: 401 });
 
         const body = await request.json();
-        const validatedData = addCustomerApiSchema.safeParse(body);
+        const validatedData = addContactApiSchema.safeParse(body);
 
         if (!validatedData.success) return NextResponse.json({
             success: false,
@@ -83,34 +83,34 @@ export async function POST(request: NextRequest) {
 
         const values = validatedData.data
 
-        const [newCustomer] = await db
-            .insert(customer)
+        const [newContact] = await db
+            .insert(contact)
             .values({
                 ...values
 
             })
             .returning({
-                id: customer.id
+                id: contact.id
             })
 
-        if (!newCustomer) return NextResponse.json({
+        if (!newContact) return NextResponse.json({
             success: false,
-            message: "Customer Addition Failed",
+            message: "contact Addition Failed",
             data: null,
         }, { status: 404 });
 
         return NextResponse.json(
             {
                 success: true,
-                message: "Customer Added Successfully",
+                message: "contact Added Successfully",
                 data: {
-                    id: newCustomer.id,
+                    id: newContact.id,
                 },
             },
             { status: 200 }
         );
     } catch (error) {
-        console.error('Error creating new customer: ', error);
+        console.error('Error creating new contact: ', error);
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 }
