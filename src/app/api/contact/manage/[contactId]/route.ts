@@ -16,12 +16,12 @@ export async function GET(
             data: null,
         }, { status: 400 });
 
-        // const session = await getSession();
-        // if (!session) return NextResponse.json({
-        //     success: false,
-        //     message: "Unauthorized",
-        //     data: null,
-        // }, { status: 401 });
+        const session = await getSession();
+        if (!session) return NextResponse.json({
+            success: false,
+            message: "Unauthorized",
+            data: null,
+        }, { status: 401 });
 
         const [data] = await db
             .select({

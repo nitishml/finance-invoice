@@ -5,7 +5,7 @@ export type AddContactDTO = {
     slug: string;
     mobile: string;
     email: string;
-    gstin: string;
+    gstin?: string | null;
     address: string;
     city: string;
     state: string;
@@ -18,7 +18,7 @@ export const addContactFormSchema = z.object({
     slug: z.string(),
     mobile: z.string(),
     email: z.string(),
-    gstin: z.string(),
+    gstin: z.string().optional(),
     address: z.string(),
     city: z.string(),
     state: z.string(),
@@ -31,7 +31,7 @@ export const addContactApiSchema = z.object({
     slug: z.string(),
     mobile: z.string(),
     email: z.string(),
-    gstin: z.string(),
+    gstin: z.string().optional(),
     address: z.string(),
     city: z.string(),
     state: z.string(),
@@ -54,7 +54,7 @@ export type ContactDetails = {
 
     mobile: string;
     email: string;
-    gstin: string;
+    gstin?: string | null;
 
     address: string;
     city: string;

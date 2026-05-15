@@ -107,7 +107,7 @@ export function AddContactForm() {
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
                                     <FieldLabel htmlFor="slug">
-                                        Slug*
+                                        Slug/Id/Alias*
                                     </FieldLabel>
                                     <Input
                                         {...field}
@@ -168,7 +168,7 @@ export function AddContactForm() {
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
                                     <FieldLabel htmlFor="gstin">
-                                        GSTIN*
+                                        GSTIN
                                     </FieldLabel>
                                     <Input
                                         {...field}

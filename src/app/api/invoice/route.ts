@@ -7,12 +7,12 @@ import { addInvoiceApiSchema } from "@/features/invoice/types";
 
 export async function GET(request: NextRequest) {
     try {
-        // const session = await getSession();
-        // if (!session) return NextResponse.json({
-        //     success: false,
-        //     message: "Unauthorized",
-        //     data: null,
-        // }, { status: 401 });
+        const session = await getSession();
+        if (!session) return NextResponse.json({
+            success: false,
+            message: "Unauthorized",
+            data: null,
+        }, { status: 401 });
 
         const { searchParams } = new URL(request.url);
         const page = parseInt(searchParams.get('page') || '1');
@@ -74,12 +74,12 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
     try {
-        // const session = await getSession();
-        // if (!session) return NextResponse.json({
-        //     success: false,
-        //     message: "Unauthorized",
-        //     data: null,
-        // }, { status: 401 });
+        const session = await getSession();
+        if (!session) return NextResponse.json({
+            success: false,
+            message: "Unauthorized",
+            data: null,
+        }, { status: 401 });
 
         const body = await request.json();
         const validatedData = addInvoiceApiSchema.safeParse(body);
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
             .insert(invoice)
             .values({
                 contactId: values.contactId,
-                handledBy: "",
+                handledBy: session.userId,
                 account: values.account,
                 status: "DRAFT",
 

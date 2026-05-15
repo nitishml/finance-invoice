@@ -15,6 +15,20 @@
       "when": 1778868031681,
       "tag": "20260515180031_sudden_longshot",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1778872798392,
+      "tag": "20260515191958_empty_scarlet_spider",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1778872854659,
+      "tag": "20260515192054_fresh_trauma",
+      "breakpoints": true
     }
   ]
 }

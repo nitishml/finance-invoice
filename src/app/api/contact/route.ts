@@ -1,5 +1,5 @@
 import { db } from "@/db/drizzle";
-import { count, desc } from "drizzle-orm";
+import { count, desc, ne, or, isNull } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import { contact } from "@/db/schema";
 import { getSession } from "@/features/auth/get-session";
@@ -7,12 +7,12 @@ import { addContactApiSchema } from "@/features/contact/types";
 
 export async function GET(request: NextRequest) {
     try {
-        // const session = await getSession();
-        // if (!session) return NextResponse.json({
-        //     success: false,
-        //     message: "Unauthorized",
-        //     data: null,
-        // }, { status: 401 });
+        const session = await getSession();
+        if (!session) return NextResponse.json({
+            success: false,
+            message: "Unauthorized",
+            data: null,
+        }, { status: 401 });
 
         const { searchParams } = new URL(request.url);
         const page = parseInt(searchParams.get('page') || '1');
@@ -29,6 +29,10 @@ export async function GET(request: NextRequest) {
                     city: contact.city,
                 })
                 .from(contact)
+                .where(or(
+                    isNull(contact.category),
+                    ne(contact.category, "EMPLOYEE")
+                ))
                 .orderBy(desc(contact.createdAt))
                 .limit(limit)
                 .offset(offset),
@@ -36,6 +40,10 @@ export async function GET(request: NextRequest) {
             db
                 .select({ count: count() })
                 .from(contact)
+                .where(or(
+                    isNull(contact.category),
+                    ne(contact.category, "EMPLOYEE")
+                ))
         ]);
 
         return NextResponse.json(
@@ -65,12 +73,12 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
     try {
-        // const session = await getSession();
-        // if (!session) return NextResponse.json({
-        //     success: false,
-        //     message: "Unauthorized",
-        //     data: null,
-        // }, { status: 401 });
+        const session = await getSession();
+        if (!session) return NextResponse.json({
+            success: false,
+            message: "Unauthorized",
+            data: null,
+        }, { status: 401 });
 
         const body = await request.json();
         const validatedData = addContactApiSchema.safeParse(body);
