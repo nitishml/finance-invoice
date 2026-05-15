@@ -21,22 +21,22 @@ import { usePathname } from "next/navigation"
 const routes = [
     {
         title: "Dashboard",
-        url: `/teacher`,
+        url: `/home`,
         icon: Home
     },
     {
-        title: "Profile",
-        url: `/teacher/profile`,
-        icon: UsersRound
+        title: "Invoices",
+        url: `/invoices`,
+        icon: ListChecks
     },
     {
-        title: "Attendance",
-        url: `/teacher/attendance`,
-        icon: ListChecks
+        title: "Customers",
+        url: `/customers`,
+        icon: UsersRound
     },
 ]
 
-export function TeacherSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const { setOpen } = useSidebar()
 
     const route = usePathname().split("/").slice(0, 4).join("/")
@@ -48,7 +48,7 @@ export function TeacherSidebar({ ...props }: React.ComponentProps<typeof Sidebar
                         <SidebarMenuButton size="lg">
                             <div className=" flex aspect-square size-8 items-center justify-center rounded-lg">
                                 <Image
-                                    src={'/logo.png'}
+                                    src={'/logo.svg'}
                                     height={32}
                                     width={32}
                                     alt="logo"
