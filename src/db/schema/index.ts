@@ -8,6 +8,6 @@ export * from './account';
 export * from './session';
 
 // entities: 3
-export * from './customer';
+export * from './contact';
 export * from './invoice';
 export * from './invoice-item';

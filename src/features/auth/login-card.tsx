@@ -45,7 +45,7 @@ export const LoginCard = () => {
                         setLoading(false);
                         setError(true);
                     } else {
-                        router.push(`/`);
+                        router.push(`/home`);
                         router.refresh();
                     }
                 },

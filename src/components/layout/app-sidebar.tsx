@@ -13,10 +13,11 @@ import {
     useSidebar,
 } from "@/components/ui/sidebar"
 import Image from "next/image"
-import { Home, LifeBuoy, ListChecks, UsersRound } from "lucide-react"
+import { FileText, Home, LifeBuoy, FileChartPie, UsersRound, MailCheck } from "lucide-react"
 import { SidebarModeToggle } from "@/components/mode-toggle"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { NavUser } from "./nav-user"
 
 const routes = [
     {
@@ -27,21 +28,32 @@ const routes = [
     {
         title: "Invoices",
         url: `/invoices`,
-        icon: ListChecks
+        icon: FileText
     },
     {
-        title: "Customers",
-        url: `/customers`,
+        title: "Contacts",
+        url: `/contacts`,
         icon: UsersRound
+    },
+    {
+        title: "Quotations",
+        url: `/quotations`,
+        icon: MailCheck
+    },
+    {
+        title: "Statements",
+        url: `/statements`,
+        icon: FileChartPie
     },
 ]
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     const { setOpen } = useSidebar()
 
-    const route = usePathname().split("/").slice(0, 4).join("/")
+    const route = "/" + usePathname().split("/").slice(0, 4)[1] // check for the first route under main routes
+    //console.log("route: ", route)
     return (
-        <Sidebar variant="inset" collapsible="icon" {...props} className="text-white ">
+        <Sidebar collapsible="icon" {...props} className="text-white ">
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
@@ -83,14 +95,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarContent>
             <SidebarFooter>
                 <SidebarMenu>
-                    <SidebarMenuItem >
-                        <SidebarMenuButton tooltip={"Support"} asChild>
-                            <a href={"/user/support"}>
-                                <LifeBuoy />
-                                <span>{"Support"}</span>
-                            </a>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
+                    <NavUser />
                     <SidebarMenuItem >
                         <SidebarModeToggle />
                     </SidebarMenuItem>

@@ -19,6 +19,15 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
         link: "text-primary underline-offset-4 hover:underline",
+
+        muted: "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+        mobileFooter:
+          "[&>svg]:stroke-foreground  flex flex-col items-center justify-center gap-1 text-[10px]",
+        view_item: "bg-custom-secondary-500 hover:bg-custom-secondary-600 text-custom-accent-400",
+        pay_item: "bg-emerald-500 hover:bg-emerald-600 text-white",
+        publish_item: "bg-amber-500 hover:bg-amber-600 text-white",
+        continue_item: "bg-custom-primary-900 hover:bg-custom-primary-700 text-custom-accent-400",
+        pagination_controls: "bg-custom-primary-800 text-custom-primary-100 hover:custom-primary-600"
       },
       size: {
         default:

@@ -1,17 +1,20 @@
 import { createId } from "@/lib/nanoid-gen";
 import { relations } from "drizzle-orm";
-import { index, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, index, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { invoice } from "./invoice";
+import { contactCategoryEnum } from "./enums";
 
-export const customer = pgTable("customer", {
+export const contact = pgTable("contact", {
     id: text("id").primaryKey().$defaultFn(() => createId()),
 
+    category: contactCategoryEnum("category"),
+    isExpenseContact: boolean("is_expense_contact").notNull().default(false),
     name: text("name").notNull(),
     slug: text("slug").notNull(),
     mobile: text("mobile").notNull(),
 
     email: text("email").notNull(),
-    gstin: text("gstin").notNull(),
+    gstin: text("gstin"),
     address: text("address").notNull(),
 
     city: text("city").notNull(),
@@ -27,10 +30,10 @@ export const customer = pgTable("customer", {
         .$onUpdate(() => /* @__PURE__ */ new Date())
         .notNull(),
 }, (table) => [
-    index("idx_cst_mobile").on(table.mobile),
-    index("idx_cst_slug").on(table.slug),
+    index("idx_ct_mobile").on(table.mobile),
+    index("idx_ct_slug").on(table.slug),
 ])
 
-export const customerRelations = relations(customer, ({ one, many }) => ({
+export const contactRelations = relations(contact, ({ one, many }) => ({
     invoices: many(invoice)
 }));

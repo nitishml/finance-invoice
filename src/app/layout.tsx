@@ -7,6 +7,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "@/components/ui/sonner";
 import { Roboto_Mono } from "next/font/google"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 const font = Roboto_Mono({
   subsets: ["latin"]
@@ -73,11 +74,13 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <QueryProvider>
-            <TooltipProvider>
-              {children}
-            </TooltipProvider>
-            <ReactQueryDevtools />
-            <Toaster position="top-center" richColors closeButton />
+            <NuqsAdapter>
+              <TooltipProvider>
+                {children}
+              </TooltipProvider>
+              <ReactQueryDevtools />
+              <Toaster position="top-center" richColors closeButton />
+            </NuqsAdapter>
           </QueryProvider>
         </ThemeProvider>
       </body>

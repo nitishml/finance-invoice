@@ -8,6 +8,41 @@
       "when": 1778847381922,
       "tag": "20260515121621_supreme_colonel_america",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1778868031681,
+      "tag": "20260515180031_sudden_longshot",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1778872798392,
+      "tag": "20260515191958_empty_scarlet_spider",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1778872854659,
+      "tag": "20260515192054_fresh_trauma",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1778875694695,
+      "tag": "20260515200814_modern_morg",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1778934789731,
+      "tag": "20260516123309_gifted_paladin",
+      "breakpoints": true
     }
   ]
 }
