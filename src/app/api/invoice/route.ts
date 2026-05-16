@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { contact, invoice, invoiceStatusEnum } from "@/db/schema";
 import { getSession } from "@/features/auth/get-session";
 import { addInvoiceApiSchema } from "@/features/invoice/types";
-import { rupeesToPaisa } from "@/lib/utils";
+import { rupeesToPaisa, transformSerial } from "@/lib/utils";
 
 const VALID_STATUSES = invoiceStatusEnum.enumValues
 
@@ -34,15 +34,14 @@ export async function GET(request: NextRequest) {
                     id: invoice.id,
                     status: invoice.status,
                     account: invoice.account,
+                    invoiceNumber: invoice.invoiceNumber,
+
                     total: invoice.total,
 
-                    expectedPaymentDate: invoice.expectedPaymentDate,
+                    dueDate: invoice.dueDate,
                     paymentDate: invoice.paymentDate,
-                    createdDate: invoice.createdAt,
-                    cancelledDate: invoice.cancelledDate,
-                    arrearedDate: invoice.arrearedDate,
 
-                    expenseType: invoice.expenseType,
+                    invoiceCategory: invoice.invoiceCategory,
                     name: contact.name,
                     slug: contact.slug,
 
@@ -112,15 +111,11 @@ export async function POST(request: NextRequest) {
                 contactId: values.contactId,
                 handledBy: session.userId,
                 account: values.account,
+
+                invoiceNumber: values.invoiceNumber,
+                invoiceSerial: values.invoiceSerial,
+
                 status: "DRAFT",
-
-                price: rupeesToPaisa(values.price),
-                taxAmount: rupeesToPaisa(values.taxAmount),
-                gstAmount: rupeesToPaisa(values.gstAmount),
-                total: rupeesToPaisa(values.total),
-
-                expectedPaymentDate: values.expectedPaymentDate
-
             })
             .returning({
                 id: contact.id

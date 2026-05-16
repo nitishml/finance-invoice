@@ -20,10 +20,11 @@ export const contactCategoryEnum = pgEnum('contact_category_enum', [
     "EMPLOYEE",
 ]);
 
-export const expenseTypeEnum = pgEnum('expense_type_enum', [
+export const invoiceCategoryEnum = pgEnum('invoice_category_enum', [
     'SALARY',
     'SERVICE',
     "RENT",
     "UTILITIES",
-    "MISC"
+    "MISC",
+    "INCOME"
 ]);

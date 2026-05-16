@@ -1,6 +1,6 @@
 import { createId } from "@/lib/nanoid-gen";
 import { relations } from "drizzle-orm";
-import { index, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, index, integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { invoice } from "./";
 
 export const invoiceItem = pgTable("invoice_item", {
@@ -11,9 +11,18 @@ export const invoiceItem = pgTable("invoice_item", {
     title: text("title").notNull(),
     description: text("description"),
 
-    price: integer("price").notNull(), //in paisa
+    rate: integer("rate").notNull(), // in paisa
     quantity: integer("quantity").notNull(),
-    total: integer("total").notNull(), //in paisa
+
+    gstAmount: integer("gst_amount").notNull(), // in paisa
+    gstRatio: integer("gst_ratio").notNull(), // out of 100
+    cgstAmount: integer("cgst_amount").notNull(), // in paisa
+    cgstRatio: integer("cgst_ratio").notNull(), // out of 100
+    sgstAmount: integer("sgst_amount").notNull(), // in paisa
+    sgstRatio: integer("sgst_ratio").notNull(), // out of 100
+    isSymmetricGst: boolean("is_symmetric_gst").notNull().default(true),
+
+    total: integer("total").notNull(), // in paisa
 
     createdAt: timestamp('created_at', { mode: 'date', withTimezone: true })
         .notNull()

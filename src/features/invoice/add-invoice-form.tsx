@@ -33,44 +33,45 @@ import { AccountToggle } from "./account-toggle"
 import { IndianRupee } from "lucide-react"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar"
-import { cn } from "@/lib/utils"
+import { cn, extractInvoiceSerial } from "@/lib/utils"
 import { format } from "date-fns"
 import { CalendarIcon, Circle } from "lucide-react"
+import { InvoiceNumberInput } from "./InvoiceNumberInput"
 
 export function AddInvoiceForm() {
     const mutation = useAddInvoice()
     const [isLoading, setLoading] = useState(false)
     const [account, setAccount] = useState<"INCOME" | "EXPENSE">("INCOME")
     const [contactId, setContactId] = useState<string | null>(null)
+    const [invoiceNumber, setInvoiceNumber] = useState<string | null>(null)
+    const [invoiceSerial, setInvoiceSerial] = useState<number | null>(null)
 
     const router = useRouter()
 
     const form = useForm<z.infer<typeof addInvoiceFormSchema>>({
         resolver: zodResolver(addInvoiceFormSchema) as any,
         defaultValues: {
-
+            invoiceDate: new Date(),
         }
     })
 
     function onSubmit(values: z.infer<typeof addInvoiceFormSchema>) {
         //console.log("values:", values)
-        if (!contactId) return null
+        if (!contactId || !invoiceNumber) return null
 
         setLoading(true)
         mutation.mutate({
-            price: values.price,
-            taxAmount: values.taxAmount,
-            gstAmount: values.gstAmount,
-            total: values.price + values.taxAmount + values.gstAmount,
             account,
             contactId: contactId,
             description: values.description,
-            expectedPaymentDate: values.expectedPaymentDate,
+            invoiceDate: values.invoiceDate,
+            invoiceNumber,
+            invoiceSerial: extractInvoiceSerial(invoiceNumber)
         }, {
             onSuccess: (data) => {
                 if (data.success && data.data) {
                     toast.success("Invoice Created")
-                    router.push(`/invoices/manage/${data.data.id}`)
+                    router.push(`/invoices/add/${data.data.id}`)
                 }
                 else {
                     toast.error(data.message || "Please try again")
@@ -91,93 +92,11 @@ export function AddInvoiceForm() {
             <form onSubmit={form.handleSubmit(onSubmit)} className=" max-w-6xl  w-full mx-auto">
                 <AccountToggle account={account} setAccount={setAccount} />
 
-                <ContactPicker account={account} setContactId={setContactId} />
+                <ContactPicker setContactId={setContactId} />
+
+                <InvoiceNumberInput setInvoiceNumber={setInvoiceNumber} />
                 <FieldGroup>
-                    <div className="w-full flex items-center justify-center gap-2 max-w-lg mx-auto">
-                        <Controller
-                            name="price"
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor="price">
-                                        Price*
-                                    </FieldLabel>
-                                    <div className='relative'>
-                                        <div className='text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 peer-disabled:opacity-50'>
-                                            <IndianRupee className='size-4' />
-                                            <span className='sr-only'>INR</span>
-                                        </div>
-                                        <Input
-                                            {...field}
-                                            id="price"
-                                            aria-invalid={fieldState.invalid}
-                                            className="pl-9 h-12"
-                                        />
-                                    </div>
 
-                                    {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
-                                    )}
-                                </Field>
-                            )}
-                        />
-
-                    </div>
-                    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2 max-w-lg mx-auto">
-                        <Controller
-                            name="taxAmount"
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor="taxAmount">
-                                        Tax Amount*
-                                    </FieldLabel>
-                                    <div className='relative'>
-                                        <div className='text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 peer-disabled:opacity-50'>
-                                            <IndianRupee className='size-4' />
-                                            <span className='sr-only'>INR</span>
-                                        </div>
-                                        <Input
-                                            {...field}
-                                            id="price"
-                                            aria-invalid={fieldState.invalid}
-                                            className="pl-9"
-                                        />
-                                    </div>
-                                    {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
-                                    )}
-                                </Field>
-                            )}
-                        />
-                        <Controller
-                            name="gstAmount"
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor="gstAmount">
-                                        GST Amount*
-                                    </FieldLabel>
-                                    <div className='relative'>
-                                        <div className='text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 peer-disabled:opacity-50'>
-                                            <IndianRupee className='size-4' />
-                                            <span className='sr-only'>INR</span>
-                                        </div>
-                                        <Input
-                                            {...field}
-                                            id="price"
-                                            aria-invalid={fieldState.invalid}
-                                            className="pl-9 "
-                                        />
-                                    </div>
-                                    {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
-                                    )}
-                                </Field>
-                            )}
-                        />
-
-                    </div>
                     <div className="max-w-lg w-full mx-auto">
                         <Controller
                             name="description"
@@ -205,12 +124,12 @@ export function AddInvoiceForm() {
 
                     <div className="max-w-lg w-full mx-auto">
                         <Controller
-                            name="expectedPaymentDate"
+                            name="invoiceDate"
                             control={form.control}
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid} className="flex flex-col">
                                     <FieldLabel htmlFor="expectedPaymentDate">
-                                        Expected Payment Date
+                                        Invoice Date
                                     </FieldLabel>
                                     <Popover>
                                         <PopoverTrigger asChild>
