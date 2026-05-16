@@ -75,7 +75,7 @@ export const PayInvoiceForm = ({ invoiceId }: Props) => {
     }
     return (
         <Dialog>
-            <DialogTrigger>
+            <DialogTrigger asChild>
                 <Button variant="pay_item" size="sm" className="px-4">
                     <BanknoteArrowDown className="w-4 h-4" />
                     Pay

@@ -14,7 +14,7 @@ export function paisaToRupees(amount: number): number {
 }
 
 export function formatRupees(amountInPaisa: number): string {
-  return "₹ " + (amountInPaisa / 100).toFixed(2);
+  return "₹" + (amountInPaisa / 100).toFixed(2);
 }
 
 export function printRupees(amountInPaisa: number): string {

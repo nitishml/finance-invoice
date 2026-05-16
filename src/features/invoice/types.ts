@@ -63,6 +63,41 @@ export type InvoiceDetails = {
     items: {}
 }
 
+export type DraftInvoiceDetails = {
+    invoice: {
+        id: string;
+        name: string;
+        slug: string;
+        mobile: string;
+        email: string;
+        gstin: string | null;
+        address: string;
+        address2: string | null;
+        city: string;
+        state: string;
+        country: string;
+        zipcode: string;
+        invoiceNumber: string;
+        invoiceDate: Date;
+        description: string | null;
+    };
+    items: {
+        id: string;
+        order: number;
+        title: string;
+        description: string | null;
+        rate: number;
+        quantity: number;
+        gstAmount: number;
+        gstRatio: number;
+        cgstAmount: number;
+        cgstRatio: number;
+        sgstAmount: number;
+        sgstRatio: number;
+        total: number;
+    }[]
+}
+
 export type InvoicePaymentDTO = {
     invoiceId: string;
     paymentDate: Date;

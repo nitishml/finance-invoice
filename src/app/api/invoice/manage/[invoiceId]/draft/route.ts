@@ -1,16 +1,16 @@
 import { db } from "@/db/drizzle";
-import { contact } from "@/db/schema";
+import { contact, invoice, invoiceItem } from "@/db/schema";
 import { getSession } from "@/features/auth/get-session";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: Promise<{ contactId: string }> }
+    { params }: { params: Promise<{ invoiceId: string }> }
 ) {
     try {
-        const { contactId } = await params
-        if (!contactId) return NextResponse.json({
+        const { invoiceId } = await params
+        if (!invoiceId) return NextResponse.json({
             success: false,
             message: "Bad Request",
             data: null,
@@ -35,13 +35,24 @@ export async function GET(
 
                 address: contact.address,
                 address2: contact.address2,
+
                 zipcode: contact.zipcode,
                 city: contact.city,
                 state: contact.state,
                 country: contact.country,
+
+                invoiceNumber: invoice.invoiceNumber,
+                invoiceDate: invoice.invoiceDate,
+                description: invoice.description,
             })
-            .from(contact)
-            .where(eq(contact.id, contactId))
+            .from(invoice)
+            .where(eq(invoice.id, invoiceId))
+            .innerJoin(contact, eq(contact.id, invoice.contactId))
+
+        const items = await db
+            .select()
+            .from(invoiceItem)
+            .where(eq(invoiceItem.invoiceId, invoiceId))
 
         if (!data) return NextResponse.json({
             success: false,
@@ -52,12 +63,15 @@ export async function GET(
         return NextResponse.json(
             {
                 success: true,
-                data
+                data: {
+                    invoice: data,
+                    items,
+                }
             },
             { status: 200 }
         );
     } catch (error) {
-        console.error('Error fetching contact by id: ', error);
+        console.error('Error fetching draft invoice by id: ', error);
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 }

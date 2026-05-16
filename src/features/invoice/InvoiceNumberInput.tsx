@@ -1,6 +1,6 @@
 "use client"
 import { Loader, TriangleAlert } from "lucide-react";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { useGetInvoiceNumber } from "./useGetInvoiceNumber";
 import {
     Field,
@@ -10,13 +10,14 @@ import {
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { extractInvoiceSerial, transformSerial } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
-type Props = {
+type WrapperProps = {
+    invoiceNumber: string | null;
     setInvoiceNumber: Dispatch<SetStateAction<string | null>>
 }
-export const InvoiceNumberInput = ({ setInvoiceNumber }: Props) => {
+export const InvoiceNumberWrapper = ({ invoiceNumber, setInvoiceNumber }: WrapperProps) => {
     const query = useGetInvoiceNumber()
-
     const isLoading = query.isLoading || query.isPending || query.isFetching
 
     if (isLoading) return (
@@ -31,25 +32,46 @@ export const InvoiceNumberInput = ({ setInvoiceNumber }: Props) => {
         </div>
     )
     const data = query.data.data
-    const nextSerial = transformSerial(data.maxSerial + 1)
     return (
-        <div className="w-full max-w-lg mx-auto pb-4">
-            <FieldGroup>
-                <Field>
-                    <FieldLabel htmlFor="username">Select Invoice Number</FieldLabel>
-                    <Input
-                        id="invoiceNumber"
-                        type="text"
-                        placeholder="format: GS-xxx-A"
-                        value={nextSerial}
-                        onChange={(e) => setInvoiceNumber(e.target.value)}
-                    />
-                    <FieldDescription>
-                        Custom serials are subject to unique constraint checks
-                    </FieldDescription>
-                </Field>
+        <InvoiceNumberInput
+            maxSerial={data.maxSerial}
+            setInvoiceNumber={setInvoiceNumber}
+            invoiceNumber={invoiceNumber}
+        />
 
-            </FieldGroup>
-        </div>
     );
 }
+
+
+type Props = {
+    invoiceNumber: string | null;
+    maxSerial: number;
+    setInvoiceNumber: Dispatch<SetStateAction<string | null>>
+}
+export const InvoiceNumberInput = ({ maxSerial, setInvoiceNumber }: Props) => {
+    const nextSerial = transformSerial(maxSerial + 1)
+    const [temp, setTemp] = useState(nextSerial)
+
+    return (
+
+        <div className='flex rounded-md shadow-xs'>
+            <Input
+                id="invoiceNumber"
+                type="text"
+                placeholder="format: GS-xxx-A"
+                value={nextSerial}
+                onChange={(e) => setTemp(e.target.value)}
+                className='-me-px rounded-r-none shadow-none focus-visible:z-1'
+            />
+            <Button
+                className='rounded-l-none'
+                onClick={() => setInvoiceNumber(temp)}
+            >
+                Confirm
+            </Button>
+        </div>
+
+    );
+}
+
+

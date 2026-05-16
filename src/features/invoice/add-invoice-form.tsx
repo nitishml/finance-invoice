@@ -18,10 +18,7 @@ import {
     Button
 } from "@/components/ui/button"
 
-import {
-    Input
-} from "@/components/ui/input"
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
+import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { useRouter } from "next/navigation"
 import { Textarea } from "@/components/ui/textarea"
 import { InPageHeader } from "@/components/layout/in-page-header"
@@ -30,13 +27,12 @@ import { addInvoiceFormSchema } from "./types"
 import { useAddInvoice } from "./useAddInvoice"
 import { ContactPicker } from "./contact-picker"
 import { AccountToggle } from "./account-toggle"
-import { IndianRupee } from "lucide-react"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar"
 import { cn, extractInvoiceSerial } from "@/lib/utils"
 import { format } from "date-fns"
-import { CalendarIcon, Circle } from "lucide-react"
-import { InvoiceNumberInput } from "./InvoiceNumberInput"
+import { CalendarIcon } from "lucide-react"
+import { InvoiceNumberInput, InvoiceNumberWrapper } from "./InvoiceNumberInput"
 
 export function AddInvoiceForm() {
     const mutation = useAddInvoice()
@@ -44,7 +40,6 @@ export function AddInvoiceForm() {
     const [account, setAccount] = useState<"INCOME" | "EXPENSE">("INCOME")
     const [contactId, setContactId] = useState<string | null>(null)
     const [invoiceNumber, setInvoiceNumber] = useState<string | null>(null)
-    const [invoiceSerial, setInvoiceSerial] = useState<number | null>(null)
 
     const router = useRouter()
 
@@ -89,12 +84,24 @@ export function AddInvoiceForm() {
     return (
         <div className="w-full flex-1 flex flex-col gap-8 items-start justify-center">
             <InPageHeader label="Add Invoice Form" />
-            <form onSubmit={form.handleSubmit(onSubmit)} className=" max-w-6xl  w-full mx-auto">
+            <form onSubmit={form.handleSubmit(onSubmit)} className=" max-w-6xl  w-full mx-auto space-y-4">
                 <AccountToggle account={account} setAccount={setAccount} />
 
                 <ContactPicker setContactId={setContactId} />
+                <FieldGroup className={cn("w-full max-w-lg mx-auto p-4 mb border rounded-md",
+                    invoiceNumber ? " border-emerald-500" : " border-rose-500"
+                )}>
+                    <Field>
+                        <FieldLabel htmlFor="username">Select Invoice Number</FieldLabel>
+                        <InvoiceNumberWrapper setInvoiceNumber={setInvoiceNumber} invoiceNumber={invoiceNumber} />
 
-                <InvoiceNumberInput setInvoiceNumber={setInvoiceNumber} />
+                        <FieldDescription>
+                            Custom serials are subject to unique constraint checks
+                        </FieldDescription>
+                    </Field>
+
+                </FieldGroup>
+
                 <FieldGroup>
 
                     <div className="max-w-lg w-full mx-auto">
@@ -128,13 +135,13 @@ export function AddInvoiceForm() {
                             control={form.control}
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid} className="flex flex-col">
-                                    <FieldLabel htmlFor="expectedPaymentDate">
+                                    <FieldLabel htmlFor="invoiceDate">
                                         Invoice Date
                                     </FieldLabel>
                                     <Popover>
                                         <PopoverTrigger asChild>
                                             <Button
-                                                id="expectedPaymentDate"
+                                                id="invoiceDate"
                                                 type="button"
                                                 variant="outline"
                                                 aria-invalid={fieldState.invalid}

@@ -37,7 +37,7 @@ export async function POST(
         await db
             .update(invoice)
             .set({
-                expectedPaymentDate: values.expectedPaymentDate,
+                dueDate: values.expectedPaymentDate,
                 status: "EXPECTED",
                 remarks: values.remarks
             })
