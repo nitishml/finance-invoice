@@ -14,49 +14,23 @@ export async function GET(request: NextRequest) {
             data: null,
         }, { status: 401 });
 
-        const { searchParams } = new URL(request.url);
-        const page = parseInt(searchParams.get('page') || '1');
-        const limit = parseInt(searchParams.get('limit') || '50');
-        const offset = (page - 1) * limit;
-
-        const [contacts, total] = await Promise.all([
-            db
-                .select({
-                    id: contact.id,
-                    name: contact.name,
-                    slug: contact.slug,
-                    mobile: contact.mobile,
-                    city: contact.city,
-                })
-                .from(contact)
-                .where(or(
-                    isNull(contact.category),
-                    ne(contact.category, "EMPLOYEE")
-                ))
-                .orderBy(desc(contact.createdAt))
-                .limit(limit)
-                .offset(offset),
-
-            db
-                .select({ count: count() })
-                .from(contact)
-                .where(or(
-                    isNull(contact.category),
-                    ne(contact.category, "EMPLOYEE")
-                ))
-        ]);
+        const contacts = await db
+            .select({
+                id: contact.id,
+                name: contact.name,
+                slug: contact.slug,
+                mobile: contact.mobile,
+                city: contact.city,
+                isExpenseContact: contact.isExpenseContact
+            })
+            .from(contact)
+            .orderBy(desc(contact.createdAt))
 
         return NextResponse.json(
             {
                 success: true,
                 data: {
                     contacts,
-                    pagination: {
-                        page,
-                        limit,
-                        total: total[0].count,
-                        pages: Math.ceil(total[0].count / limit),
-                    },
                 }
             },
             { status: 200 }

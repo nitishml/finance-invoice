@@ -45,6 +45,7 @@ export type ContactListItem = {
     slug: string;
     mobile: string;
     city: string;
+    isExpenseContact: boolean;
 }
 
 export type ContactDetails = {
@@ -61,4 +62,12 @@ export type ContactDetails = {
     state: string;
     country: string;
     zipcode: string;
+}
+
+export type ContactSearchListItem = {
+    id: string;
+    name: string;
+    slug: string;
+    mobile: string;
+    city: string;
 }

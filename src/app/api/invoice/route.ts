@@ -1,9 +1,12 @@
 import { db } from "@/db/drizzle";
 import { count, desc, eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
-import { contact, invoice } from "@/db/schema";
+import { contact, invoice, invoiceStatusEnum } from "@/db/schema";
 import { getSession } from "@/features/auth/get-session";
 import { addInvoiceApiSchema } from "@/features/invoice/types";
+import { rupeesToPaisa } from "@/lib/utils";
+
+const VALID_STATUSES = invoiceStatusEnum.enumValues
 
 export async function GET(request: NextRequest) {
     try {
@@ -15,9 +18,15 @@ export async function GET(request: NextRequest) {
         }, { status: 401 });
 
         const { searchParams } = new URL(request.url);
+        const rawStatus = searchParams.get('status')
+        const statusFilter = VALID_STATUSES.includes(rawStatus as typeof VALID_STATUSES[number])
+            ? rawStatus as typeof VALID_STATUSES[number]
+            : null
         const page = parseInt(searchParams.get('page') || '1');
         const limit = parseInt(searchParams.get('limit') || '50');
         const offset = (page - 1) * limit;
+
+
 
         const [invoices, total] = await Promise.all([
             db
@@ -31,7 +40,9 @@ export async function GET(request: NextRequest) {
                     paymentDate: invoice.paymentDate,
                     createdDate: invoice.createdAt,
                     cancelledDate: invoice.cancelledDate,
+                    arrearedDate: invoice.arrearedDate,
 
+                    expenseType: invoice.expenseType,
                     name: contact.name,
                     slug: contact.slug,
 
@@ -39,6 +50,9 @@ export async function GET(request: NextRequest) {
                 .from(invoice)
                 .innerJoin(contact, eq(contact.id, invoice.contactId))
                 .orderBy(desc(invoice.createdAt))
+                .where(statusFilter ? eq(
+                    invoice.status, statusFilter
+                ) : undefined)
                 .limit(limit)
                 .offset(offset),
 
@@ -100,10 +114,10 @@ export async function POST(request: NextRequest) {
                 account: values.account,
                 status: "DRAFT",
 
-                price: values.price,
-                taxAmount: values.taxAmount,
-                gstAmount: values.gstAmount,
-                total: values.total,
+                price: rupeesToPaisa(values.price),
+                taxAmount: rupeesToPaisa(values.taxAmount),
+                gstAmount: rupeesToPaisa(values.gstAmount),
+                total: rupeesToPaisa(values.total),
 
                 expectedPaymentDate: values.expectedPaymentDate
 

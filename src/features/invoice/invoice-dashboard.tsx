@@ -20,6 +20,7 @@ export const InvoiceDashboard = () => {
     const query = useGetInvoices({
         page,
         limit,
+        status: "ARREARED"
     })
 
     const isLoading = query.isLoading || query.isPending || query.isFetching
@@ -38,10 +39,7 @@ export const InvoiceDashboard = () => {
                     </StatIndicator>
                 </Stat>
                 <div className="flex flex-col items-center justify-center gap-1">
-                    <Button variant={'outline'} className="w-full h-12">
-                        <Download />
-                        Export CSV
-                    </Button>
+
                     <Button className="w-full h-14" asChild>
                         <Link href={`/invoices/add`}>
                             <UserPlus />

@@ -24,6 +24,8 @@ const buttonVariants = cva(
         mobileFooter:
           "[&>svg]:stroke-foreground  flex flex-col items-center justify-center gap-1 text-[10px]",
         view_item: "bg-custom-secondary-500 hover:bg-custom-secondary-600 text-custom-accent-400",
+        pay_item: "bg-emerald-500 hover:bg-emerald-600 text-white",
+        publish_item: "bg-amber-500 hover:bg-amber-600 text-white",
         continue_item: "bg-custom-primary-900 hover:bg-custom-primary-700 text-custom-accent-400",
         pagination_controls: "bg-custom-primary-800 text-custom-primary-100 hover:custom-primary-600"
       },

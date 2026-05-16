@@ -1,6 +1,6 @@
 import { createId } from "@/lib/nanoid-gen";
 import { relations } from "drizzle-orm";
-import { index, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, index, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { invoice } from "./invoice";
 import { contactCategoryEnum } from "./enums";
 
@@ -8,6 +8,7 @@ export const contact = pgTable("contact", {
     id: text("id").primaryKey().$defaultFn(() => createId()),
 
     category: contactCategoryEnum("category"),
+    isExpenseContact: boolean("is_expense_contact").notNull().default(false),
     name: text("name").notNull(),
     slug: text("slug").notNull(),
     mobile: text("mobile").notNull(),

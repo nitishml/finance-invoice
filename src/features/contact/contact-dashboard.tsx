@@ -17,10 +17,7 @@ export const ContactDashboard = () => {
     const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1))
     const [limit, setLimit] = useQueryState('limit', parseAsInteger.withDefault(25))
 
-    const query = useGetContacts({
-        page,
-        limit,
-    })
+    const query = useGetContacts()
 
     const isLoading = query.isLoading || query.isPending || query.isFetching
     if (isLoading) return <QueryLoading />
@@ -32,7 +29,7 @@ export const ContactDashboard = () => {
             <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3   gap-6 items-end">
                 <Stat>
                     <StatLabel>Total</StatLabel>
-                    <StatValue>{data.pagination.total}</StatValue>
+                    <StatValue>{data.contacts.length}</StatValue>
                     <StatIndicator variant="icon" color="success">
                         <Users />
                     </StatIndicator>
@@ -55,11 +52,6 @@ export const ContactDashboard = () => {
             </div>
             <ContactsTable
                 contacts={data.contacts}
-                total={data.pagination.total}
-                page={data.pagination.page}
-                limit={data.pagination.limit}
-                setPage={setPage}
-                setLimit={setLimit}
             />
         </div>
     );

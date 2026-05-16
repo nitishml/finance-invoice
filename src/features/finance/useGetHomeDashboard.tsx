@@ -1,17 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { PaginationResponse } from "@/types/generic-props";
-import { ContactListItem } from "./types";
+import { FinanceDashboardDTO } from "./types";
 
 type ApiResponse = {
     success: boolean;
-    data: {
-        contacts: ContactListItem[],
-    } | null;
+    data: FinanceDashboardDTO | null;
     message?: string;
 }
 
-async function fetchContacts(): Promise<ApiResponse> {
-    const response = await fetch(`/api/contact`, {
+async function fetchFinanceDashboard(): Promise<ApiResponse> {
+    const response = await fetch(`/api/finance/dashboard`, {
         method: 'GET',
         credentials: 'include',
         headers: {
@@ -28,10 +25,10 @@ async function fetchContacts(): Promise<ApiResponse> {
     return data
 }
 
-export function useGetContacts() {
+export function useGetFinanceDashboard() {
     return useQuery({
-        queryKey: ['contacts'],
-        queryFn: () => fetchContacts(),
+        queryKey: ['finance', 'dashboard'],
+        queryFn: () => fetchFinanceDashboard(),
         staleTime: 1000 * 60 * 15, // 15 minutes
         gcTime: 1000 * 60 * 10, // 15 minutes
         retry: (failureCount, error) => {

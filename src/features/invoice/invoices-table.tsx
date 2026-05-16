@@ -10,10 +10,13 @@ import {
     useReactTable,
 } from "@tanstack/react-table"
 import {
+    BanknoteArrowDown,
     ChevronLeft,
     ChevronRight,
     ChevronsLeft,
     ChevronsRight,
+    Eye,
+    FileCheck,
 } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
@@ -22,6 +25,11 @@ import Link from "next/link"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { InvoiceListItem } from "./types"
 import { format } from "date-fns"
+import { cn, printRupees } from "@/lib/utils"
+import { StatusBadge } from "./status-badge"
+import { Separator } from "@/components/ui/separator"
+import { PayInvoiceForm } from "./pay-invoice-form"
+import { PublishInvoiceForm } from "./publish-invoice-form"
 
 interface Props {
     invoices: InvoiceListItem[];
@@ -55,19 +63,28 @@ export function InvoicesTable({ invoices, total, page, limit, setPage, setLimit 
                 </Button>
             ),
             cell: ({ row }) => (
-                <div className="flex flex-col items-start justify-center">
-                    <p className="">{row.original.name}</p>
-                    <p className="font-semibold text-sm">{row.original.slug}</p>
+                <div className="flex items-start justify-start gap-2">
+                    <div className={cn("w-2 h-10",
+                        row.original.account === "INCOME" && "bg-emerald-500",
+                        row.original.account === "EXPENSE" && "bg-rose-500",
+                    )}>
+
+                    </div>
+                    <div className="flex flex-col items-start justify-start">
+                        <p className="">{row.original.name}</p>
+                        <p className="font-semibold text-sm">{row.original.expenseType && (row.original.expenseType + " - ")}{row.original.slug}</p>
+                    </div>
                 </div>
             ),
         },
         {
-            accessorKey: "account",
-            header: "Account",
+            accessorKey: "status",
+            header: ({ column }) => (
+                <p className="text-center">{"Status"}</p>
+            ),
             cell: ({ row }) => (
-                <div className="flex flex-col items-start justify-center">
-                    <p className="">{row.original.account}</p>
-                    <p className="font-semibold text-sm">{row.original.status}</p>
+                <div className="flex flex-col items-center justify-center">
+                    <StatusBadge status={row.original.status} />
                 </div>
             ),
         },
@@ -75,9 +92,27 @@ export function InvoicesTable({ invoices, total, page, limit, setPage, setLimit 
             accessorKey: "expectedPaymentDate",
             header: "Date",
             cell: ({ row }) => (
+                <div className="flex flex-col items-start justify-center gap-1">
+                    {row.original.paymentDate && (
+                        <p className="font-semibold text-base ">{"Paid:" + format(row.original.paymentDate, "dd-MM-yyyy")}</p>
+                    )}
+                    {row.original.cancelledDate && (
+                        <p className="font-semibold text-base ">{"Canc:" + format(row.original.cancelledDate, "dd-MM-yyyy")}</p>
+                    )}
+                    {row.original.arrearedDate && (
+                        <p className="font-semibold text-base ">{"Arr:" + format(row.original.arrearedDate, "dd-MM-yyyy")}</p>
+                    )}
+                    <p className="text-muted-background">{"Exp:" + format(row.original.expectedPaymentDate, "dd-MM-yyyy")}</p>
+                </div>
+            ),
+        },
+        {
+            accessorKey: "total",
+            header: "Amount",
+            cell: ({ row }) => (
                 <div className="flex flex-col items-start justify-center">
-                    <p className="">{row.original.account}</p>
-                    <p className="font-semibold text-sm">{format(row.original.expectedPaymentDate, "dd-MM-yyyy")}</p>
+                    <p className="">{printRupees(row.original.total)}</p>
+                    {/* <p className="font-semibold text-sm">{row.original.status}</p> */}
                 </div>
             ),
         },
@@ -85,14 +120,23 @@ export function InvoicesTable({ invoices, total, page, limit, setPage, setLimit 
             id: "actions",
             header: "Actions",
             cell: ({ row }) => (
-                <Button variant="view_item" size="sm" className="" asChild>
-                    <Link
-                        href={`/contacts/manage/${row.original.id}`}
-                        prefetch={false}>
-                        <Edit className="w-4 h-4" />
-                        View
-                    </Link>
-                </Button>
+                <div className="flex items-center justify-start gap-1">
+                    <Button variant="view_item" size="sm" className="" asChild>
+                        <Link
+                            href={`/contacts/manage/${row.original.id}`}
+                            prefetch={false}>
+                            <Eye className="w-4 h-4" />
+                            View
+                        </Link>
+                    </Button>
+                    {row.original.status === "EXPECTED" && (
+                        <PayInvoiceForm invoiceId={row.original.id} />
+                    )}
+                    {row.original.status === "DRAFT" && (
+                        <PublishInvoiceForm invoiceId={row.original.id} expectedPaymentDate={row.original.expectedPaymentDate} />
+                    )}
+
+                </div>
             ),
         },
     ]

@@ -6,6 +6,7 @@ import {
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
+    getPaginationRowModel,
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table"
@@ -24,15 +25,13 @@ import { ContactListItem } from "./types"
 
 interface Props {
     contacts: ContactListItem[];
-    total: number;
-    page: number
-    limit: number
-    setPage: (page: number) => void
-    setLimit: (limit: number) => void
 }
 
-export function ContactsTable({ contacts, total, page, limit, setPage, setLimit }: Props) {
-
+export function ContactsTable({ contacts, }: Props) {
+    const [pagination, setPagination] = React.useState({
+        pageIndex: 0,
+        pageSize: 10, // your default limit
+    })
     const data = React.useMemo<ContactListItem[]>(
         () =>
             contacts.map(c => ({
@@ -95,29 +94,17 @@ export function ContactsTable({ contacts, total, page, limit, setPage, setLimit 
     ]
 
     const table = useReactTable({
-        data,
+        data: contacts,
         columns,
-        pageCount: Math.ceil(total / limit), // Calculate total pages from server
         state: {
-            pagination: {
-                pageIndex: page - 1, // TanStack uses 0-based index
-                pageSize: limit,
-            },
+            pagination,
         },
-        getRowId: row => row.id, // important: ensures row.id is used for selection
-        onPaginationChange: (updater) => {
-            const newState = typeof updater === 'function'
-                ? updater({ pageIndex: page - 1, pageSize: limit })
-                : updater
-
-            setPage(newState.pageIndex + 1) // Convert back to 1-based
-            setLimit(newState.pageSize)
-        },
-        manualPagination: true, // KEY: Enable server-side pagination
+        onPaginationChange: setPagination,
+        getRowId: row => row.id,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        // Remove getPaginationRowModel() for server-side pagination
+        getPaginationRowModel: getPaginationRowModel(),
     })
 
     return (

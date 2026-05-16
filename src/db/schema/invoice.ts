@@ -1,6 +1,6 @@
 import { relations } from "drizzle-orm";
 import { boolean, index, integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
-import { user, accountEnum, invoiceStatusEnum, invoiceItem, contact } from "./";
+import { user, accountEnum, invoiceStatusEnum, invoiceItem, contact, expenseTypeEnum } from "./";
 import { createId } from "@/lib/nanoid-gen";
 
 export const invoice = pgTable("invoice", {
@@ -24,6 +24,7 @@ export const invoice = pgTable("invoice", {
 
     description: text("description"),
     remarks: text("remarks"),
+    expenseType: expenseTypeEnum("expense_type"),
 
     isCorrection: boolean("is_correction"), // if this invoice is correction another
     referenceInvId: text("reference_inv_id"), // for referring to corrected invoice

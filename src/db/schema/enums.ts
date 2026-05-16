@@ -19,3 +19,11 @@ export const contactCategoryEnum = pgEnum('contact_category_enum', [
     'INDUVIDUAL',
     "EMPLOYEE",
 ]);
+
+export const expenseTypeEnum = pgEnum('expense_type_enum', [
+    'SALARY',
+    'SERVICE',
+    "RENT",
+    "UTILITIES",
+    "MISC"
+]);
