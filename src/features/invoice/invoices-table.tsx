@@ -25,7 +25,7 @@ import Link from "next/link"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { InvoiceListItem } from "./types"
 import { format } from "date-fns"
-import { cn, printRupees } from "@/lib/utils"
+import { cn, formatRupees, printRupees } from "@/lib/utils"
 import { StatusBadge } from "./status-badge"
 import { Separator } from "@/components/ui/separator"
 import { PayInvoiceForm } from "./pay-invoice-form"
@@ -72,7 +72,7 @@ export function InvoicesTable({ invoices, total, page, limit, setPage, setLimit 
                     </div>
                     <div className="flex flex-col items-start justify-start">
                         <p className="">{row.original.name}</p>
-                        <p className="font-semibold text-sm">{row.original.expenseType && (row.original.expenseType + " - ")}{row.original.slug}</p>
+                        <p className="font-semibold text-sm">{row.original.invoiceCategory && (row.original.invoiceCategory + " - ")}{row.original.slug}</p>
                     </div>
                 </div>
             ),
@@ -89,20 +89,15 @@ export function InvoicesTable({ invoices, total, page, limit, setPage, setLimit 
             ),
         },
         {
-            accessorKey: "expectedPaymentDate",
+            accessorKey: "dueDate",
             header: "Date",
             cell: ({ row }) => (
                 <div className="flex flex-col items-start justify-center gap-1">
                     {row.original.paymentDate && (
                         <p className="font-semibold text-base ">{"Paid:" + format(row.original.paymentDate, "dd-MM-yyyy")}</p>
                     )}
-                    {row.original.cancelledDate && (
-                        <p className="font-semibold text-base ">{"Canc:" + format(row.original.cancelledDate, "dd-MM-yyyy")}</p>
-                    )}
-                    {row.original.arrearedDate && (
-                        <p className="font-semibold text-base ">{"Arr:" + format(row.original.arrearedDate, "dd-MM-yyyy")}</p>
-                    )}
-                    <p className="text-muted-background">{"Exp:" + format(row.original.expectedPaymentDate, "dd-MM-yyyy")}</p>
+
+                    <p className="text-muted-background">{"Exp:" + format(row.original.dueDate, "dd-MM-yyyy")}</p>
                 </div>
             ),
         },
@@ -111,7 +106,7 @@ export function InvoicesTable({ invoices, total, page, limit, setPage, setLimit 
             header: "Amount",
             cell: ({ row }) => (
                 <div className="flex flex-col items-start justify-center">
-                    <p className="">{printRupees(row.original.total)}</p>
+                    <p className="">{formatRupees(row.original.total)}</p>
                     {/* <p className="font-semibold text-sm">{row.original.status}</p> */}
                 </div>
             ),
@@ -133,7 +128,7 @@ export function InvoicesTable({ invoices, total, page, limit, setPage, setLimit 
                         <PayInvoiceForm invoiceId={row.original.id} />
                     )}
                     {row.original.status === "DRAFT" && (
-                        <PublishInvoiceForm invoiceId={row.original.id} expectedPaymentDate={row.original.expectedPaymentDate} />
+                        <PublishInvoiceForm invoiceId={row.original.id} expectedPaymentDate={row.original.dueDate} />
                     )}
 
                 </div>

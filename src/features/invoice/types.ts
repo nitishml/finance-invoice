@@ -1,59 +1,42 @@
-import { accountEnum, expenseTypeEnum, invoiceStatusEnum } from "@/db/schema";
+import { accountEnum, invoiceCategoryEnum, invoiceStatusEnum } from "@/db/schema";
 import * as z from "zod";
 
 export type AddInvoiceDTO = {
     contactId: string;
     account: typeof accountEnum.enumValues[number];
-
-    price: number;
-    taxAmount: number;
-    gstAmount: number;
-    total: number;
-
-    expectedPaymentDate: Date;
-
+    invoiceNumber: string;
+    invoiceSerial: number;
+    invoiceDate: Date;
     description?: string | null;
 }
 
 export const addInvoiceFormSchema = z.object({
-    // contactId: z.string(),
-    // account: z.enum(accountEnum.enumValues),
-
-    price: z.coerce.number(),
-    taxAmount: z.coerce.number(),
-    gstAmount: z.coerce.number(),
-
     description: z.string().optional(),
-    expectedPaymentDate: z.coerce.date(),
+    invoiceDate: z.coerce.date(),
 })
 
 export const addInvoiceApiSchema = z.object({
     contactId: z.string(),
     account: z.enum(accountEnum.enumValues),
 
-    price: z.coerce.number(),
-    taxAmount: z.coerce.number(),
-    gstAmount: z.coerce.number(),
-    total: z.coerce.number(),
-
-    expectedPaymentDate: z.coerce.date(),
-    description: z.string().optional()
+    invoiceNumber: z.string(),
+    invoiceSerial: z.coerce.number(),
+    description: z.string().optional(),
+    invoiceDate: z.coerce.date(),
 })
 
 export type InvoiceListItem = {
     id: string;
     account: typeof accountEnum.enumValues[number];
     status: typeof invoiceStatusEnum.enumValues[number];
+    invoiceNumber: string;
+
     total: number;
 
-    expectedPaymentDate: Date;
-    createdDate: Date;
-
+    dueDate: Date;
     paymentDate: Date | null;
-    cancelledDate: Date | null;
-    arrearedDate: Date | null;
+    invoiceCategory: typeof invoiceCategoryEnum.enumValues[number] | null;
 
-    expenseType: typeof expenseTypeEnum.enumValues[number];
     name: string;
     slug: string;
 }
@@ -62,19 +45,57 @@ export type InvoiceDetails = {
     id: string;
     status: typeof accountEnum.enumValues[number];
     account: typeof invoiceStatusEnum.enumValues[number];
+    invoiceNumber: string;
 
-    price: number;
+    amount: number;
+    cgst: number;
+    sgst: number;
     total: number;
-    taxAmount: number;
-    gstAmount: number;
 
-    expectedPaymentDate: Date;
+    invoiceDate: Date;
+    dueDate: Date;
     paymentDate: Date | null;
-    createdDate: Date;
     cancelledDate: Date | null;
+    arrearedDate: Date | null;
 
     name: string;
     slug: string;
+    items: {}
+}
+
+export type DraftInvoiceDetails = {
+    invoice: {
+        id: string;
+        name: string;
+        slug: string;
+        mobile: string;
+        email: string;
+        gstin: string | null;
+        address: string;
+        address2: string | null;
+        city: string;
+        state: string;
+        country: string;
+        zipcode: string;
+        invoiceNumber: string;
+        invoiceDate: Date;
+        description: string | null;
+    };
+    items: {
+        id: string;
+        order: number;
+        title: string;
+        description: string | null;
+        rate: number;
+        quantity: number;
+        gstAmount: number;
+        gstRatio: number;
+        cgstAmount: number;
+        cgstRatio: number;
+        sgstAmount: number;
+        sgstRatio: number;
+        total: number;
+    }[]
 }
 
 export type InvoicePaymentDTO = {

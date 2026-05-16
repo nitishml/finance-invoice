@@ -58,6 +58,7 @@ export type ContactDetails = {
     gstin?: string | null;
 
     address: string;
+    adress2: string | null;
     city: string;
     state: string;
     country: string;

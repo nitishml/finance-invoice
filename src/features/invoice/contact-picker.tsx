@@ -22,10 +22,9 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { cn } from "@/lib/utils";
 
 type Props = {
-    account: "INCOME" | "EXPENSE"
     setContactId: Dispatch<SetStateAction<string | null>>;
 }
-export const ContactPicker = ({ setContactId, account }: Props) => {
+export const ContactPicker = ({ setContactId }: Props) => {
     const [open, setOpen] = useState(false)
     const [selectedContact, setSelectedContact] = useState<ContactListItem | null>(null)
 
@@ -36,9 +35,6 @@ export const ContactPicker = ({ setContactId, account }: Props) => {
     if (!query.data || !query.data.data) return <DataError />
     const data = query.data.data
 
-    const filteredData = account === "INCOME" ?
-        data.contacts.filter((data) => !data.isExpenseContact) :
-        data.contacts.filter((data) => data.isExpenseContact)
     return (
         <div className="*:not-first:mt-2 py-4 max-w-lg mx-auto">
             <h3>Select Contact</h3>
@@ -70,8 +66,8 @@ export const ContactPicker = ({ setContactId, account }: Props) => {
                         <CommandList>
                             <CommandEmpty>No Contact found.</CommandEmpty>
                             <CommandGroup>
-                                <div className="w-full space-y-2">
-                                    {filteredData.map((item) => (
+                                <div className="w-full">
+                                    {data.contacts.map((item) => (
                                         <CommandItem
                                             key={item.id}
                                             value={item.name}
@@ -81,7 +77,7 @@ export const ContactPicker = ({ setContactId, account }: Props) => {
                                                 setContactId(newContact?.id ?? null)
                                                 setOpen(false)
                                             }}
-                                            className={cn("h-10", item.isExpenseContact && "border border-rose-500")}
+                                            className={cn("h-10")}
                                         >
                                             {item.name}
                                             <span className="text-muted-foreground text-xs ml-1">{item.mobile}</span>

@@ -16,6 +16,7 @@ export const contact = pgTable("contact", {
     email: text("email").notNull(),
     gstin: text("gstin"),
     address: text("address").notNull(),
+    address2: text("address_2"),
 
     city: text("city").notNull(),
     state: text("state").notNull(),

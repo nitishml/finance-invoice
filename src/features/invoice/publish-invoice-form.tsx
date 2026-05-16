@@ -76,7 +76,7 @@ export const PublishInvoiceForm = ({ invoiceId, expectedPaymentDate }: Props) =>
     }
     return (
         <Dialog>
-            <DialogTrigger>
+            <DialogTrigger asChild>
                 <Button variant="publish_item" size="sm" className="px-4">
                     <SendHorizontal className="w-4 h-4" />
                     Publish
