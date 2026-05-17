@@ -32,6 +32,7 @@ export const usePublishInvoice = () => {
         mutationFn: publishInvoice,
         onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ['invoice', data.data?.id] });
+            queryClient.invalidateQueries({ queryKey: ['draft-invoice', data.data?.id] });
             queryClient.invalidateQueries({ queryKey: ['invoices',] });
         },
         onError: (error) => {

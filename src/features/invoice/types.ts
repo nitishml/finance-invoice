@@ -80,6 +80,12 @@ export type DraftInvoiceDetails = {
         invoiceNumber: string;
         invoiceDate: Date;
         description: string | null;
+        amount: number;
+        cgst: number;
+        sgst: number;
+        total: number;
+        dueDate: Date,
+        status: typeof invoiceStatusEnum.enumValues[number];
     };
     items: {
         id: string;
@@ -88,6 +94,7 @@ export type DraftInvoiceDetails = {
         description: string | null;
         rate: number;
         quantity: number;
+        amount: number;
         gstAmount: number;
         gstRatio: number;
         cgstAmount: number;
@@ -97,6 +104,22 @@ export type DraftInvoiceDetails = {
         total: number;
     }[]
 }
+
+export type SaveDraftDTO = {
+    invoiceId: string;
+    amount: number;
+    cgst: number;
+    sgst: number;
+    total: number;
+}
+
+export const saveDraftApiSchema = z.object({
+    invoiceId: z.string(),
+    amount: z.coerce.number(),
+    cgst: z.coerce.number(),
+    sgst: z.coerce.number(),
+    total: z.coerce.number(),
+})
 
 export type InvoicePaymentDTO = {
     invoiceId: string;

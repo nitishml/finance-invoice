@@ -35,9 +35,10 @@ import { usePublishInvoice } from "./usePublishInvoice";
 
 type Props = {
     invoiceId: string;
-    expectedPaymentDate: Date | null
+    expectedPaymentDate: Date | null,
+    lg?: boolean
 }
-export const PublishInvoiceForm = ({ invoiceId, expectedPaymentDate }: Props) => {
+export const PublishInvoiceForm = ({ invoiceId, expectedPaymentDate, lg }: Props) => {
     const mutation = usePublishInvoice()
     const [isLoading, setLoading] = useState(false)
     // const router = useRouter()
@@ -77,7 +78,10 @@ export const PublishInvoiceForm = ({ invoiceId, expectedPaymentDate }: Props) =>
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button variant="publish_item" size="sm" className="px-4">
+                <Button
+                    variant="publish_item" size={lg ? "lg" : "sm"}
+                    className={cn("px-4", lg && "w-[200px] h-10")}
+                >
                     <SendHorizontal className="w-4 h-4" />
                     Publish
                 </Button>
@@ -98,7 +102,7 @@ export const PublishInvoiceForm = ({ invoiceId, expectedPaymentDate }: Props) =>
                                 render={({ field, fieldState }) => (
                                     <Field data-invalid={fieldState.invalid} className="flex flex-col">
                                         <FieldLabel htmlFor="dob">
-                                            Expected Payment Date
+                                            Due Payment Date
                                         </FieldLabel>
                                         <Popover>
                                             <PopoverTrigger asChild>

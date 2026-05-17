@@ -1,1 +1,0 @@
-ALTER TABLE "contact" ADD COLUMN "is_expense_contact" boolean DEFAULT false NOT NULL;
