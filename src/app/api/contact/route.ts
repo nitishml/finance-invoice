@@ -47,12 +47,12 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
     try {
-        const session = await getSession();
-        if (!session) return NextResponse.json({
-            success: false,
-            message: "Unauthorized",
-            data: null,
-        }, { status: 401 });
+        // const session = await getSession();
+        // if (!session) return NextResponse.json({
+        //     success: false,
+        //     message: "Unauthorized",
+        //     data: null,
+        // }, { status: 401 });
 
         const body = await request.json();
         const validatedData = addContactApiSchema.safeParse(body);

@@ -1,6 +1,6 @@
 {
-  "id": "1b6554e9-9dde-454c-80fc-49ee5ed85ff2",
-  "prevId": "ac5f8191-2500-45e2-8643-042c2b912045",
+  "id": "66c9f4d0-b6f9-4f85-81b7-c74a5f7da2fa",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -138,6 +138,12 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "address_2": {
+          "name": "address_2",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "city": {
           "name": "city",
@@ -484,41 +490,59 @@
           "primaryKey": false,
           "notNull": true
         },
-        "serial": {
-          "name": "serial",
-          "type": "serial",
+        "invoice_number": {
+          "name": "invoice_number",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "price": {
-          "name": "price",
+        "invoice_serial": {
+          "name": "invoice_serial",
           "type": "integer",
           "primaryKey": false,
           "notNull": true
         },
-        "tax_amount": {
-          "name": "tax_amount",
+        "amount": {
+          "name": "amount",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": 0
         },
-        "gst_amount": {
-          "name": "gst_amount",
+        "cgst": {
+          "name": "cgst",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": 0
+        },
+        "sgst": {
+          "name": "sgst",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
         },
         "total": {
           "name": "total",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": 0
         },
-        "expected_payment_date": {
-          "name": "expected_payment_date",
+        "invoice_date": {
+          "name": "invoice_date",
           "type": "timestamp with time zone",
           "primaryKey": false,
-          "notNull": true
+          "notNull": true,
+          "default": "now()"
+        },
+        "due_date": {
+          "name": "due_date",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
         },
         "payment_date": {
           "name": "payment_date",
@@ -538,6 +562,13 @@
           "primaryKey": false,
           "notNull": false
         },
+        "invoice_category": {
+          "name": "invoice_category",
+          "type": "invoice_category_enum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": false
+        },
         "description": {
           "name": "description",
           "type": "text",
@@ -550,24 +581,18 @@
           "primaryKey": false,
           "notNull": false
         },
-        "expense_type": {
-          "name": "expense_type",
-          "type": "expense_type_enum",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "is_correction": {
-          "name": "is_correction",
-          "type": "boolean",
-          "primaryKey": false,
-          "notNull": false
-        },
         "reference_inv_id": {
           "name": "reference_inv_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "is_recurring": {
+          "name": "is_recurring",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
         },
         "created_at": {
           "name": "created_at",
@@ -600,11 +625,11 @@
           "method": "btree",
           "with": {}
         },
-        "idx_inv_serial": {
-          "name": "idx_inv_serial",
+        "idx_inv_no": {
+          "name": "idx_inv_no",
           "columns": [
             {
-              "expression": "serial",
+              "expression": "invoice_number",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -645,11 +670,11 @@
           "method": "btree",
           "with": {}
         },
-        "idx_inv_date_created": {
-          "name": "idx_inv_date_created",
+        "idx_inv_date_due": {
+          "name": "idx_inv_date_due",
           "columns": [
             {
-              "expression": "created_at",
+              "expression": "due_date",
               "isExpression": false,
               "asc": true,
               "nulls": "last"
@@ -756,6 +781,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "amount": {
+          "name": "amount",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
         "gst_amount": {
           "name": "gst_amount",
           "type": "integer",
@@ -764,7 +795,7 @@
         },
         "gst_ratio": {
           "name": "gst_ratio",
-          "type": "integer",
+          "type": "real",
           "primaryKey": false,
           "notNull": true
         },
@@ -776,7 +807,7 @@
         },
         "cgst_ratio": {
           "name": "cgst_ratio",
-          "type": "integer",
+          "type": "real",
           "primaryKey": false,
           "notNull": true
         },
@@ -788,7 +819,7 @@
         },
         "sgst_ratio": {
           "name": "sgst_ratio",
-          "type": "integer",
+          "type": "real",
           "primaryKey": false,
           "notNull": true
         },
@@ -877,15 +908,16 @@
         "EMPLOYEE"
       ]
     },
-    "public.expense_type_enum": {
-      "name": "expense_type_enum",
+    "public.invoice_category_enum": {
+      "name": "invoice_category_enum",
       "schema": "public",
       "values": [
         "SALARY",
         "SERVICE",
         "RENT",
         "UTILITIES",
-        "MISC"
+        "MISC",
+        "INCOME"
       ]
     },
     "public.invoice_status_enum": {

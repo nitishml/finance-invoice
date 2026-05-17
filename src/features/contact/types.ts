@@ -33,6 +33,7 @@ export const addContactApiSchema = z.object({
     email: z.string(),
     gstin: z.string().optional(),
     address: z.string(),
+    address2: z.string().optional(),
     city: z.string(),
     state: z.string(),
     country: z.string(),

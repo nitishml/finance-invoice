@@ -66,6 +66,7 @@ export const InvoiceNumberInput = ({ maxSerial, setInvoiceNumber }: Props) => {
             <Button
                 className='rounded-l-none'
                 onClick={() => setInvoiceNumber(temp)}
+                type="button"
             >
                 Confirm
             </Button>

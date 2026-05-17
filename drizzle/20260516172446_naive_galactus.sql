@@ -1,1 +1,0 @@
-ALTER TABLE "invoice" RENAME COLUMN "expected_payment_date" TO "due_date";

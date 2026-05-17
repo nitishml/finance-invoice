@@ -1,1 +1,0 @@
-ALTER TABLE "contact" ALTER COLUMN "gstin" DROP NOT NULL;

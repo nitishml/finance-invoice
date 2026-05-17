@@ -1,1 +1,0 @@
-ALTER TABLE "invoice" ADD COLUMN "invoice_serial" integer NOT NULL;
