@@ -1,5 +1,5 @@
 import { db } from "@/db/drizzle";
-import { and, count, desc, eq, sum } from "drizzle-orm";
+import { and, count, desc, eq, gte, lt, sum } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import { contact, invoice } from "@/db/schema";
 import { getSession } from "@/features/auth/get-session";
@@ -13,6 +13,9 @@ export async function GET(request: NextRequest) {
             data: null,
         }, { status: 401 });
 
+        const now = new Date();
+        const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+        const startOfNextMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
 
         const [{ expenseCount }] = await db
             .select({ expenseCount: count() })
@@ -46,6 +49,36 @@ export async function GET(request: NextRequest) {
                 eq(invoice.status, "PAID")
             ));
 
+        const [expectedMonthlyIncome] = await db
+            .select({
+                amount: sum(invoice.total),
+                count: count()
+            })
+            .from(invoice)
+            .where(
+                and(
+                    eq(invoice.account, "INCOME"),
+                    eq(invoice.status, "EXPECTED"),
+                    gte(invoice.dueDate, startOfMonth),
+                    lt(invoice.dueDate, startOfNextMonth)
+                )
+            );
+
+        const [expectedMonthlyExpense] = await db
+            .select({
+                amount: sum(invoice.total),
+                count: count()
+            })
+            .from(invoice)
+            .where(
+                and(
+                    eq(invoice.account, "EXPENSE"),
+                    eq(invoice.status, "EXPECTED"),
+                    gte(invoice.dueDate, startOfMonth),
+                    lt(invoice.dueDate, startOfNextMonth)
+                )
+            );
+
         return NextResponse.json(
             {
                 success: true,
@@ -54,6 +87,11 @@ export async function GET(request: NextRequest) {
                     expenseTotal: expenseTotal ? Number(expenseTotal) : 0,
                     incomeCount,
                     incomeTotal: incomeTotal ? Number(incomeTotal) : 0,
+                    expectedMonthlyIncome: Number(expectedMonthlyIncome.amount),
+                    expectedMonthyIncomeCount: expectedMonthlyIncome.count,
+                    expectedMonthlyExpense: Number(expectedMonthlyExpense.amount),
+                    expectedMonthyExpenseCount: expectedMonthlyExpense.count,
+
                 }
             },
             { status: 200 }

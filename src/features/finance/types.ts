@@ -1,6 +1,8 @@
 export type FinanceDashboardDTO = {
-    expenseCount: number;
     expenseTotal: number;
-    incomeCount: number;
     incomeTotal: number;
+    expectedMonthlyIncome: number;
+    expectedMonthyIncomeCount: number;
+    expectedMonthlyExpense: number;
+    expectedMonthyExpenseCount: number;
 }
