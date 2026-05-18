@@ -69,6 +69,8 @@ export async function POST(req: NextRequest) {
             waitUntil: 'networkidle0', // waits for all network requests to finish
             timeout: 30000,
         });
+        await page.evaluate(() => document.fonts.ready);
+
 
         // Optional: wait for a sentinel element to confirm render is complete
         // await page.waitForSelector('[data-pdf-ready]', { timeout: 10000 });

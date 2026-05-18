@@ -1,22 +1,12 @@
-"use client"
-import { DataError, QueryLoading } from "@/components/custom-loaders";
-import { useGetInvoiceDetails } from "../useGetInvoiceDetails";
 import { Card } from "@/components/ui/card";
 import { formatRupees } from "@/lib/utils";
 import { format } from "date-fns";
+import { InvoiceDetails } from "../types";
 
 type Props = {
-    invoiceId: string;
+    data: InvoiceDetails
 }
-export const PrintInvoiceWrapper = ({ invoiceId }: Props) => {
-    const query = useGetInvoiceDetails({ invoiceId })
-
-    const isLoading = query.isLoading || query.isPending || query.isFetching
-    if (isLoading) return <QueryLoading />
-
-    if (!query.data || !query.data.data) return <DataError />
-    const data = query.data.data
-
+export const PrintInvoiceContent = ({ data }: Props) => {
     return (
         <div className="print-container">
             <div className="w-full space-y-8 ">
