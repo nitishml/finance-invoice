@@ -118,7 +118,7 @@ export function InvoicesTable({ invoices, total, page, limit, setPage, setLimit 
                 <div className="flex items-center justify-start gap-1">
                     <Button variant="view_item" size="sm" className="" asChild>
                         <Link
-                            href={`/contacts/manage/${row.original.id}`}
+                            href={`/invoices/manage/${row.original.id}`}
                             prefetch={false}>
                             <Eye className="w-4 h-4" />
                             View

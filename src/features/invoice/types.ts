@@ -43,8 +43,9 @@ export type InvoiceListItem = {
 
 export type InvoiceDetails = {
     id: string;
-    status: typeof accountEnum.enumValues[number];
-    account: typeof invoiceStatusEnum.enumValues[number];
+
+    account: typeof accountEnum.enumValues[number];
+    status: typeof invoiceStatusEnum.enumValues[number];
     invoiceNumber: string;
 
     amount: number;
@@ -52,20 +53,60 @@ export type InvoiceDetails = {
     sgst: number;
     total: number;
 
+    name: string;
+    slug: string;
+    mobile: string;
+    email: string;
+    gstin: string | null;
+    address: string;
+    address2: string | null;
+    city: string;
+    state: string;
+    country: string;
+    zipcode: string;
+
     invoiceDate: Date;
     dueDate: Date;
     paymentDate: Date | null;
     cancelledDate: Date | null;
     arrearedDate: Date | null;
 
-    name: string;
-    slug: string;
-    items: {}
-}
+
+    invoiceCategory: typeof invoiceCategoryEnum.enumValues[number];
+    description: string | null;
+    remarks: string | null;
+
+    items: {
+        id: string;
+        order: number;
+        title: string;
+        description: string | null;
+        rate: number;
+        quantity: number;
+        amount: number;
+        gstAmount: number;
+        gstRatio: number;
+        cgstAmount: number;
+        cgstRatio: number;
+        sgstAmount: number;
+        sgstRatio: number;
+        total: number;
+    }[]
+};
 
 export type DraftInvoiceDetails = {
     invoice: {
         id: string;
+
+        account: typeof accountEnum.enumValues[number];
+        status: typeof invoiceStatusEnum.enumValues[number];
+        invoiceNumber: string;
+
+        amount: number;
+        cgst: number;
+        sgst: number;
+        total: number;
+
         name: string;
         slug: string;
         mobile: string;
@@ -77,15 +118,14 @@ export type DraftInvoiceDetails = {
         state: string;
         country: string;
         zipcode: string;
-        invoiceNumber: string;
+
         invoiceDate: Date;
+        dueDate: Date;
+
+        invoiceCategory: typeof invoiceCategoryEnum.enumValues[number];
         description: string | null;
-        amount: number;
-        cgst: number;
-        sgst: number;
-        total: number;
-        dueDate: Date,
-        status: typeof invoiceStatusEnum.enumValues[number];
+        remarks: string | null;
+
     };
     items: {
         id: string;

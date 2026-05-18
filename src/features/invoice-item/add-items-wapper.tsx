@@ -26,19 +26,6 @@ export const AddItemsWrapper = ({ invoiceId }: Props) => {
     if (!query.data || !query.data.data) return <DataError />
     const data = query.data.data
 
-    // const cumulativeAmount = data.items.reduce((accumulator, currentItem) => {
-    //     return accumulator + currentItem.amount;
-    // }, 0);
-    // const cumulativeTotal = data.items.reduce((accumulator, currentItem) => {
-    //     return accumulator + currentItem.total;
-    // }, 0);
-    // const cumulativecgst = data.items.reduce((accumulator, currentItem) => {
-    //     return accumulator + currentItem.cgstAmount;
-    // }, 0);
-    // const cumulativesgst = data.items.reduce((accumulator, currentItem) => {
-    //     return accumulator + currentItem.sgstAmount;
-    // }, 0);
-
     function handleSaveDraftClick() {
         //console.log("clicked")
         setOpsLoading(true)
