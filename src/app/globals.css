@@ -162,3 +162,12 @@
     @apply font-sans;
   }
 }
+
+/* for custom print routes */
+.print-container {
+  width: 794px;
+  /* A4 width at 96dpi */
+  margin: 0;
+  padding: 32px;
+  background: white;
+}
