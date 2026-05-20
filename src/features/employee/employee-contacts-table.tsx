@@ -6,39 +6,33 @@ import {
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
+    getPaginationRowModel,
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table"
 import {
-    BanknoteArrowDown,
     ChevronLeft,
     ChevronRight,
     ChevronsLeft,
     ChevronsRight,
-    Eye,
-    FileCheck,
 } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { ArrowUpDown, Edit } from "lucide-react"
 import Link from "next/link"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { ContactListItem } from "./types"
-import { format } from "date-fns"
-import { cn, formatRupees, } from "@/lib/utils"
+import { EmployeeContactListItem } from "./types"
 
 interface Props {
-    contacts: ContactListItem[];
-    total: number;
-    page: number
-    limit: number
-    setPage: (page: number) => void
-    setLimit: (limit: number) => void
+    contacts: EmployeeContactListItem[];
 }
 
-export function ContactsTable({ contacts, total, page, limit, setPage, setLimit }: Props) {
-
-    const data = React.useMemo<ContactListItem[]>(
+export function EmployeeContactsTable({ contacts, }: Props) {
+    const [pagination, setPagination] = React.useState({
+        pageIndex: 0,
+        pageSize: 10,
+    })
+    const data = React.useMemo<EmployeeContactListItem[]>(
         () =>
             contacts.map(c => ({
                 ...c,
@@ -46,10 +40,18 @@ export function ContactsTable({ contacts, total, page, limit, setPage, setLimit 
         [contacts]
     )
 
-    const columns: ColumnDef<ContactListItem>[] = [
+    const columns: ColumnDef<EmployeeContactListItem>[] = [
         {
             accessorKey: "name",
-            header: "Name",
+            header: ({ column }) => (
+                <Button
+                    variant="muted"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    className="px-0"
+                >
+                    Name <ArrowUpDown className="ml-1 h-4 w-4" />
+                </Button>
+            ),
             cell: ({ row }) => (
                 <div className="flex flex-col items-start justify-center">
                     <p className="">{row.original.name}</p>
@@ -58,22 +60,38 @@ export function ContactsTable({ contacts, total, page, limit, setPage, setLimit 
             ),
         },
         {
-            accessorKey: "mobile",
-            header: "Contact",
+            accessorKey: "designation",
+            header: ({ column }) => (
+                <Button
+                    variant="muted"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    className="px-0"
+                >
+                    Contact <ArrowUpDown className="ml-1 h-4 w-4" />
+                </Button>
+            ),
             cell: ({ row }) => (
                 <div className="flex flex-col items-start justify-center">
-                    <p className="">{row.original.mobile}</p>
-                    <p className="font-semibold text-sm">{row.original.email}</p>
+                    <p className="">{row.original.designation}</p>
+                    <p className="font-semibold text-sm">{row.original.department}</p>
                 </div>
             ),
         },
         {
-            accessorKey: "category",
-            header: "Category",
+            accessorKey: "mobile",
+            header: ({ column }) => (
+                <Button
+                    variant="muted"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                    className="px-0"
+                >
+                    Contact <ArrowUpDown className="ml-1 h-4 w-4" />
+                </Button>
+            ),
             cell: ({ row }) => (
                 <div className="flex flex-col items-start justify-center">
-                    <p className="">{row.original.category}</p>
-                    {/* <p className="font-semibold text-sm">{row.original.email}</p> */}
+                    <p className="">{row.original.mobile}</p>
+                    <p className="font-semibold text-sm">{row.original.email}</p>
                 </div>
             ),
         },
@@ -94,29 +112,17 @@ export function ContactsTable({ contacts, total, page, limit, setPage, setLimit 
     ]
 
     const table = useReactTable({
-        data,
+        data: contacts,
         columns,
-        pageCount: Math.ceil(total / limit), // Calculate total pages from server
         state: {
-            pagination: {
-                pageIndex: page - 1, // TanStack uses 0-based index
-                pageSize: limit,
-            },
+            pagination,
         },
-        getRowId: row => row.id, // important: ensures row.id is used for selection
-        onPaginationChange: (updater) => {
-            const newState = typeof updater === 'function'
-                ? updater({ pageIndex: page - 1, pageSize: limit })
-                : updater
-
-            setPage(newState.pageIndex + 1) // Convert back to 1-based
-            setLimit(newState.pageSize)
-        },
-        manualPagination: true, // KEY: Enable server-side pagination
+        onPaginationChange: setPagination,
+        getRowId: row => row.id,
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        // Remove getPaginationRowModel() for server-side pagination
+        getPaginationRowModel: getPaginationRowModel(),
     })
 
     return (

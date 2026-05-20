@@ -1,6 +1,6 @@
 import { Page } from "@/components/layout/page";
 import { getSession } from "@/features/auth/get-session";
-import { AddContactForm } from "@/features/contact/add-contact-form";
+import { AddContactDashboard } from "@/features/contact/add-contact-form";
 import { Metadata } from "next";
 import { redirect } from 'next/navigation';
 
@@ -17,7 +17,7 @@ export default async function AppPage() {
         <Page.Root>
             <Page.Header title="Add Contact" />
             <Page.Main className=" max-w-7xl py-20 md:pt-0">
-                <AddContactForm />
+                <AddContactDashboard />
             </Page.Main>
         </Page.Root>
     );

@@ -28,7 +28,10 @@ export const ContactPicker = ({ setContactId }: Props) => {
     const [open, setOpen] = useState(false)
     const [selectedContact, setSelectedContact] = useState<ContactListItem | null>(null)
 
-    const query = useGetContacts()
+    const query = useGetContacts({
+        page: 1,
+        limit: 10
+    })
     const isLoading = query.isLoading || query.isPending || query.isFetching
     if (isLoading) return <QueryLoading />
 

@@ -1,7 +1,6 @@
-import { contactCategoryEnum, invoiceCategoryEnum } from "@/db/schema";
-import * as z from "zod";
+import z from "zod";
 
-export type AddContactDTO = {
+export type AddCustomerContactDTO = {
     name: string;
     slug: string;
     mobile: string;
@@ -21,9 +20,16 @@ export type AddContactDTO = {
 
     stateCode?: string | null;
     currencyCode?: string | null;
+
+    pocName?: string | null;
+    pocContact?: string | null;
+    pocEmail?: string | null;
+
+    websiteUrl?: string | null;
+    remarks?: string | null;
 }
 
-export const addContactFormSchema = z.object({
+export const addCustomerContactFormSchema = z.object({
     name: z.string(),
     slug: z.string(),
     mobile: z.string(),
@@ -42,12 +48,17 @@ export const addContactFormSchema = z.object({
     zipcode: z.string(),
 
     stateCode: z.string(),
-    currencyCode: z.string().optional(),
+    currencyCode: z.string(),
 
-    category: z.enum(contactCategoryEnum.enumValues).optional(),
+    pocName: z.string().optional(),
+    pocContact: z.string().optional(),
+    pocEmail: z.string().optional(),
+
+    websiteUrl: z.string().optional(),
+    remarks: z.string().optional(),
 })
 
-export const addContactApiSchema = z.object({
+export const addCustomerContactApiSchema = z.object({
     name: z.string(),
     slug: z.string(),
     mobile: z.string(),
@@ -56,6 +67,7 @@ export const addContactApiSchema = z.object({
     gstin: z.string().optional(),
     cin: z.string().optional(),
     pan: z.string().optional(),
+
 
     address: z.string(),
     address2: z.string().optional(),
@@ -66,50 +78,22 @@ export const addContactApiSchema = z.object({
     zipcode: z.string(),
 
     stateCode: z.string(),
-    currencyCode: z.string().optional(),
+    currencyCode: z.string(),
 
-    category: z.enum(contactCategoryEnum.enumValues).optional(),
 
+    pocName: z.string().optional(),
+    pocContact: z.string().optional(),
+    pocEmail: z.string().optional(),
+
+    websiteUrl: z.string().optional(),
+    remarks: z.string().optional(),
 })
 
-export type ContactListItem = {
+export type ClientContactListItem = {
     id: string;
     name: string;
     slug: string;
     mobile: string;
     email: string;
-    category: typeof contactCategoryEnum.enumValues[number];
-}
-
-export type ContactDetails = {
-    id: string;
-    category: typeof contactCategoryEnum.enumValues[number] | null;
-
-    name: string;
-    slug: string;
-    mobile: string;
-    email: string;
-
-    gstin?: string | null;
-    cin?: string | null;
-    pan?: string | null;
-
-    address: string;
-    address2?: string | null;
-
-    city: string;
-    state: string;
-    country: string;
-    zipcode: string;
-
-    stateCode?: string | null;
-    currencyCode?: string | null;
-}
-
-export type ContactSearchListItem = {
-    id: string;
-    name: string;
-    slug: string;
-    mobile: string;
     city: string;
 }

@@ -17,19 +17,44 @@ export const ContactDashboard = () => {
     const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1))
     const [limit, setLimit] = useQueryState('limit', parseAsInteger.withDefault(25))
 
-    const query = useGetContacts()
+    const query = useGetContacts({
+        page,
+        limit,
+    })
 
     const isLoading = query.isLoading || query.isPending || query.isFetching
     if (isLoading) return <QueryLoading />
 
     if (!query.data || !query.data.data) return <DataError />
     const data = query.data.data
+
     return (
         <div className="w-full space-y-4">
-            <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3   gap-6 items-end">
+            <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4   gap-6 items-end">
                 <Stat>
                     <StatLabel>Total</StatLabel>
-                    <StatValue>{data.contacts.length}</StatValue>
+                    <StatValue>{data.pagination.total}</StatValue>
+                    <StatIndicator variant="icon" color="success">
+                        <Users />
+                    </StatIndicator>
+                </Stat>
+                <Stat>
+                    <StatLabel>Employees</StatLabel>
+                    <StatValue>{data.employeeCount}</StatValue>
+                    <StatIndicator variant="icon" color="success">
+                        <Users />
+                    </StatIndicator>
+                </Stat>
+                <Stat>
+                    <StatLabel>Customers</StatLabel>
+                    <StatValue>{data.customerCount}</StatValue>
+                    <StatIndicator variant="icon" color="success">
+                        <Users />
+                    </StatIndicator>
+                </Stat>
+                <Stat>
+                    <StatLabel>Vendors</StatLabel>
+                    <StatValue>{data.vendorCount}</StatValue>
                     <StatIndicator variant="icon" color="success">
                         <Users />
                     </StatIndicator>
@@ -52,6 +77,11 @@ export const ContactDashboard = () => {
             </div>
             <ContactsTable
                 contacts={data.contacts}
+                total={data.pagination.total}
+                page={data.pagination.page}
+                limit={data.pagination.limit}
+                setPage={setPage}
+                setLimit={setLimit}
             />
         </div>
     );

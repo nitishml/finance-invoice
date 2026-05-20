@@ -11,3 +11,8 @@ export * from './session';
 export * from './contact';
 export * from './invoice';
 export * from './invoice-item';
+
+// specialized contacts: 3
+export * from './employee';
+export * from './customer';
+export * from './vendor';
