@@ -6,7 +6,7 @@ import { contactCategoryEnum } from "./enums";
 
 export const contact = pgTable("contact", {
     id: text("id").primaryKey().$defaultFn(() => createId()),
-    category: contactCategoryEnum("category"),
+    category: contactCategoryEnum("category").notNull(),
 
     name: text("name").notNull(),
     slug: text("slug").notNull(),

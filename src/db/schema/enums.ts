@@ -16,7 +16,7 @@ export const invoiceStatusEnum = pgEnum('invoice_status_enum', [
 
 export const contactCategoryEnum = pgEnum('contact_category_enum', [
     'VENDOR',
-    'INDUVIDUAL',
+    'CLIENT',
     "EMPLOYEE",
 ]);
 

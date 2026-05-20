@@ -38,9 +38,13 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { contactCategoryEnum } from "@/db/schema"
+import { AddEmployeeContact } from "../employee/add-employee-form"
+import { AddClientContact } from "../client/add-client-form"
+import { AddVendorContact } from "../vendor/add-vendor-form"
 export function AddContactForm() {
     const mutation = useAddContact()
     const [isLoading, setLoading] = useState(false)
+    const [category, setCategory] = useState<"CLIENT" | "EMPLOYEE" | "VENDOR">("CLIENT")
     const router = useRouter()
 
     const form = useForm<z.infer<typeof addContactFormSchema>>({
@@ -98,401 +102,35 @@ export function AddContactForm() {
     if (isLoading || mutation.isPending) return <QueryLoading />;
     return (
         <div className="w-full flex-1 flex flex-col gap-8 items-center justify-center">
-            <InPageHeader label="Add Contact Form" />
-            <form onSubmit={form.handleSubmit(onSubmit)} className=" w-full">
-                <FieldGroup className="  flex flex-col items-center justify-center gap-8">
-                    <div className="max-w-lg">
-                        <Controller
-                            name="category"
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                    <FieldContent>
-                                        <FieldLabel htmlFor="category">
-                                            Contact Category
-                                        </FieldLabel>
-                                        <FieldDescription>
-                                            used for filtering and analytics
-                                        </FieldDescription>
-                                        {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                                    </FieldContent>
-                                    <Select
-                                        name={field.name}
-                                        value={field.value}
-                                        onValueChange={field.onChange}
-                                    >
-                                        <SelectTrigger
-                                            id="category"
-                                            aria-invalid={fieldState.invalid}
-                                            className="min-w-[120px]"
-                                        >
-                                            <SelectValue placeholder="Select Category" />
-                                        </SelectTrigger>
-                                        <SelectContent position="item-aligned">
-                                            {contactCategoryEnum.enumValues.map((item) => (
-                                                <SelectItem
-                                                    key={item}
-                                                    value={item}>{item}</SelectItem>
-
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </Field>
-                            )}
-                        />
-                    </div>
-                    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2">
-                        <Controller
-                            name="name"
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor="name">
-                                        Full Name*
-                                    </FieldLabel>
-
-                                    <div className='relative'>
-                                        <div className='text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 peer-disabled:opacity-50'>
-                                            <Building2 className='size-4' />
-                                            <span className='sr-only'>Name</span>
-                                        </div>
-                                        <Input
-                                            {...field}
-                                            id="name"
-                                            aria-invalid={fieldState.invalid}
-                                            className="pl-9 h-12 border-foreground"
-                                        />
-                                    </div>
-                                    {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
-                                    )}
-                                </Field>
-                            )}
-                        />
-                        <Controller
-                            name="slug"
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor="slug">
-                                        Slug/Id/Alias*
-                                    </FieldLabel>
-                                    <div className='relative'>
-                                        <div className='text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 peer-disabled:opacity-50'>
-                                            <UserSearch className='size-4' />
-                                            <span className='sr-only'>Slug</span>
-                                        </div>
-                                        <Input
-                                            {...field}
-                                            id="slug"
-                                            aria-invalid={fieldState.invalid}
-                                            className="pl-9 h-12 border-foreground"
-                                        />
-                                    </div>
-
-                                    {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
-                                    )}
-                                </Field>
-                            )}
-                        />
-                    </div>
-                    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2">
-                        <Controller
-                            name="mobile"
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor="mobile">
-                                        Mobile*
-                                    </FieldLabel>
-
-                                    <div className='relative'>
-                                        <div className='text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 peer-disabled:opacity-50'>
-                                            <Phone className='size-4' />
-                                            <span className='sr-only'>mobile</span>
-                                        </div>
-                                        <Input
-                                            {...field}
-                                            id="mobile"
-                                            aria-invalid={fieldState.invalid}
-                                            className="pl-9 h-12 border-foreground"
-                                        />
-                                    </div>
-
-                                    {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
-                                    )}
-                                </Field>
-                            )}
-                        />
-                        <Controller
-                            name="email"
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor="email">
-                                        Email*
-                                    </FieldLabel>
-                                    <div className='relative'>
-                                        <div className='text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 peer-disabled:opacity-50'>
-                                            <Mail className='size-4' />
-                                            <span className='sr-only'>mobile</span>
-                                        </div>
-                                        <Input
-                                            {...field}
-                                            id="email"
-                                            aria-invalid={fieldState.invalid}
-                                            className="pl-9 h-12 border-foreground"
-                                        />
-                                    </div>
-                                    {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
-                                    )}
-                                </Field>
-                            )}
-                        />
-                    </div>
-                    <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-2">
-                        <Controller
-                            name="gstin"
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor="gstin">
-                                        GSTIN
-                                    </FieldLabel>
-                                    <Input
-                                        {...field}
-                                        id="gstin"
-                                        aria-invalid={fieldState.invalid}
-                                    />
-                                    {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
-                                    )}
-                                </Field>
-                            )}
-                        />
-                        <Controller
-                            name="cin"
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor="cin">
-                                        CIN
-                                    </FieldLabel>
-                                    <Input
-                                        {...field}
-                                        id="cin"
-                                        aria-invalid={fieldState.invalid}
-                                    />
-                                    {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
-                                    )}
-                                </Field>
-                            )}
-                        />
-                        <Controller
-                            name="pan"
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor="pan">
-                                        PAN
-                                    </FieldLabel>
-                                    <Input
-                                        {...field}
-                                        id="pan"
-                                        aria-invalid={fieldState.invalid}
-                                    />
-                                    {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
-                                    )}
-                                </Field>
-                            )}
-                        />
-
-                    </div>
-                    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2">
-
-                        <Controller
-                            name="address"
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor="address">
-                                        Address Line 1*
-                                    </FieldLabel>
-                                    <Textarea
-                                        {...field}
-                                        id="address"
-                                        placeholder="Official Address"
-                                        aria-invalid={fieldState.invalid}
-                                    />
-
-                                    {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
-                                    )}
-                                </Field>
-                            )}
-                        />
-                        <Controller
-                            name="address2"
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor="address2">
-                                        Address Line 2
-                                    </FieldLabel>
-                                    <Textarea
-                                        {...field}
-                                        id="address2"
-                                        aria-invalid={fieldState.invalid}
-                                    />
-
-                                    {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
-                                    )}
-                                </Field>
-                            )}
-                        />
-                    </div>
-                    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2">
-                        <Controller
-                            name="city"
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor="city">
-                                        City*
-                                    </FieldLabel>
-                                    <Input
-                                        {...field}
-                                        id="city"
-                                        aria-invalid={fieldState.invalid}
-                                    />
-                                    {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
-                                    )}
-                                </Field>
-                            )}
-                        />
-
-                        <Controller
-                            name="state"
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor="state">
-                                        State*
-                                    </FieldLabel>
-                                    <Input
-                                        {...field}
-                                        id="state"
-                                        aria-invalid={fieldState.invalid}
-                                    />
-                                    {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
-                                    )}
-                                </Field>
-                            )}
-                        />
-
-                    </div>
-                    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2">
-                        <Controller
-                            name="country"
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor="country">
-                                        Country*
-                                    </FieldLabel>
-                                    <Input
-                                        {...field}
-                                        id="country"
-                                        aria-invalid={fieldState.invalid}
-                                    />
-                                    {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
-                                    )}
-                                </Field>
-                            )}
-                        />
-                        <Controller
-                            name="zipcode"
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor="zipcode">
-                                        Zipcode*
-                                    </FieldLabel>
-                                    <Input
-                                        {...field}
-                                        id="zipcode"
-                                        aria-invalid={fieldState.invalid}
-                                    />
-                                    {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
-                                    )}
-                                </Field>
-                            )}
-                        />
-                    </div>
-                    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2">
-                        <Controller
-                            name="stateCode"
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor="stateCode">
-                                        State Code*
-                                    </FieldLabel>
-                                    <Input
-                                        {...field}
-                                        id="stateCode"
-                                        aria-invalid={fieldState.invalid}
-                                    />
-                                    {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
-                                    )}
-                                </Field>
-                            )}
-                        />
-                        <Controller
-                            name="currencyCode"
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor="currencyCode">
-                                        Currency Code*
-                                    </FieldLabel>
-                                    <Input
-                                        {...field}
-                                        id="currencyCode"
-                                        aria-invalid={fieldState.invalid}
-                                    />
-                                    {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
-                                    )}
-                                </Field>
-                            )}
-                        />
-                    </div>
-                    <Button
-                        size={'lg'}
-                        type="submit"
-                        variant={'default'}
-                        className=" max-w-sm w-full h-12"
-                        disabled={isLoading}
-                    >
-                        <PlusCircle />
-                        SUBMIT
-                    </Button>
-                </FieldGroup>
-            </form>
-
-            {/* <DevTool control={form.control} /> */}
+            <div className="w-full flex items-center justify-evenly gap-4">
+                <Button
+                    onClick={() => setCategory("EMPLOYEE")}
+                    className="w-[200px] h-12"
+                >
+                    ADD EMPLOYEE
+                </Button>
+                <Button
+                    onClick={() => setCategory("CLIENT")}
+                    className="w-[200px] h-12"
+                >
+                    ADD CLIENT
+                </Button>
+                <Button
+                    onClick={() => setCategory("VENDOR")}
+                    className="w-[200px] h-12"
+                >
+                    ADD VENDOR
+                </Button>
+            </div>
+            {category === "EMPLOYEE" && (
+                <AddEmployeeContact />
+            )}
+            {category === "CLIENT" && (
+                <AddClientContact />
+            )}
+            {category === "VENDOR" && (
+                <AddVendorContact />
+            )}
         </div>
     )
 }
