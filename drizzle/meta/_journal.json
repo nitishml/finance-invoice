@@ -50,6 +50,20 @@
       "when": 1779294451743,
       "tag": "20260520162731_mean_viper",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1779299726976,
+      "tag": "20260520175526_tranquil_dreadnoughts",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1779299799133,
+      "tag": "20260520175639_careless_nemesis",
+      "breakpoints": true
     }
   ]
 }

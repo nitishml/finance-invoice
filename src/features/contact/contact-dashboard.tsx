@@ -46,8 +46,8 @@ export const ContactDashboard = () => {
                     </StatIndicator>
                 </Stat>
                 <Stat>
-                    <StatLabel>Clients</StatLabel>
-                    <StatValue>{data.clientCount}</StatValue>
+                    <StatLabel>Customers</StatLabel>
+                    <StatValue>{data.customerCount}</StatValue>
                     <StatIndicator variant="icon" color="success">
                         <Users />
                     </StatIndicator>

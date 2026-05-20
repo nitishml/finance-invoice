@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
         const total = await db.$count(contact)
 
         const employeeCount = await db.$count(contact, eq(contact.category, "EMPLOYEE"))
-        const clientCount = await db.$count(contact, eq(contact.category, "CLIENT"))
+        const customerCount = await db.$count(contact, eq(contact.category, "CUSTOMER"))
 
         const vendorCount = await db.$count(contact, eq(contact.category, "VENDOR"))
 
@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
                 data: {
                     contacts,
                     employeeCount,
-                    clientCount,
+                    customerCount,
                     vendorCount,
                     pagination: {
                         page,

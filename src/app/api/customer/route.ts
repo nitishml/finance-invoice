@@ -3,8 +3,8 @@ import { desc, eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import { contact } from "@/db/schema";
 import { getSession } from "@/features/auth/get-session";
-import { client } from "@/db/schema";
-import { addClientContactApiSchema } from "@/features/client/types";
+import { customer } from "@/db/schema";
+import { addCustomerContactApiSchema } from "@/features/customer/types";
 
 export async function GET(request: NextRequest) {
     try {
@@ -22,11 +22,10 @@ export async function GET(request: NextRequest) {
                 slug: contact.slug,
                 mobile: contact.mobile,
                 email: contact.email,
-                //officialEmail: employee.officialEmail,
                 city: contact.city,
             })
             .from(contact)
-            .where(eq(contact.category, "CLIENT"))
+            .where(eq(contact.category, "CUSTOMER"))
             .orderBy(desc(contact.createdAt))
 
         return NextResponse.json(
@@ -40,7 +39,7 @@ export async function GET(request: NextRequest) {
         );
 
     } catch (error) {
-        console.error('Error fetching employee contacts: ', error);
+        console.error('Error fetching customer contacts: ', error);
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 }
@@ -58,7 +57,7 @@ export async function POST(request: NextRequest) {
         }, { status: 401 });
 
         const body = await request.json();
-        const validatedData = addClientContactApiSchema.safeParse(body);
+        const validatedData = addCustomerContactApiSchema.safeParse(body);
 
         if (!validatedData.success) return NextResponse.json({
             success: false,
@@ -71,7 +70,7 @@ export async function POST(request: NextRequest) {
         const [newContact] = await db
             .insert(contact)
             .values({
-                category: "CLIENT",
+                category: "CUSTOMER",
                 name: values.name,
                 slug: values.slug,
 
@@ -100,7 +99,7 @@ export async function POST(request: NextRequest) {
         }, { status: 404 });
 
         await db
-            .insert(client)
+            .insert(customer)
             .values({
                 id: newContact.id,
 
@@ -119,7 +118,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(
             {
                 success: true,
-                message: "Client Contact Added Successfully",
+                message: "Customer Contact Added Successfully",
                 data: {
                     id: newContact.id,
                 },
@@ -127,7 +126,7 @@ export async function POST(request: NextRequest) {
             { status: 200 }
         );
     } catch (error) {
-        console.error('Error creating new client contact: ', error);
+        console.error('Error creating new customer contact: ', error);
         return NextResponse.json(
             { error: "Internal server error" },
             { status: 500 }

@@ -14,5 +14,5 @@ export * from './invoice-item';
 
 // specialized contacts: 3
 export * from './employee';
-export * from './client';
+export * from './customer';
 export * from './vendor';

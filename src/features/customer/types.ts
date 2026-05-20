@@ -1,6 +1,6 @@
 import z from "zod";
 
-export type AddClientContactDTO = {
+export type AddCustomerContactDTO = {
     name: string;
     slug: string;
     mobile: string;
@@ -29,7 +29,7 @@ export type AddClientContactDTO = {
     remarks?: string | null;
 }
 
-export const addClientContactFormSchema = z.object({
+export const addCustomerContactFormSchema = z.object({
     name: z.string(),
     slug: z.string(),
     mobile: z.string(),
@@ -58,7 +58,7 @@ export const addClientContactFormSchema = z.object({
     remarks: z.string().optional(),
 })
 
-export const addClientContactApiSchema = z.object({
+export const addCustomerContactApiSchema = z.object({
     name: z.string(),
     slug: z.string(),
     mobile: z.string(),

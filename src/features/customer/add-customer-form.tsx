@@ -27,16 +27,16 @@ import { Textarea } from "@/components/ui/textarea"
 import { InPageHeader } from "@/components/layout/in-page-header"
 import { QueryLoading } from "@/components/custom-loaders"
 import { Building2, Mail, Phone, PlusCircle, UserSearch } from "lucide-react"
-import { useAddClientContact } from "./useAddClient"
-import { addClientContactFormSchema } from "./types"
+import { addCustomerContactFormSchema } from "./types"
+import { useAddCustomerContact } from "./useAddCustomer"
 
-export function AddClientContact() {
-    const mutation = useAddClientContact()
+export function AddCustomerContact() {
+    const mutation = useAddCustomerContact()
     const [isLoading, setLoading] = useState(false)
     const router = useRouter()
 
-    const form = useForm<z.infer<typeof addClientContactFormSchema>>({
-        resolver: zodResolver(addClientContactFormSchema),
+    const form = useForm<z.infer<typeof addCustomerContactFormSchema>>({
+        resolver: zodResolver(addCustomerContactFormSchema),
         defaultValues: {
             city: "Bengaluru",
             state: "Karnataka",
@@ -46,7 +46,7 @@ export function AddClientContact() {
         }
     })
 
-    function onSubmit(values: z.infer<typeof addClientContactFormSchema>) {
+    function onSubmit(values: z.infer<typeof addCustomerContactFormSchema>) {
         //console.log("values:", values)
         setLoading(true)
         mutation.mutate({
@@ -90,7 +90,7 @@ export function AddClientContact() {
     if (isLoading || mutation.isPending) return <QueryLoading />;
     return (
         <div className="w-full flex-1 flex flex-col gap-8 items-center justify-center">
-            <InPageHeader label="Add Client Contact Form" />
+            <InPageHeader label="Add Customer Contact Form" />
             <form onSubmit={form.handleSubmit(onSubmit)} className=" w-full">
                 <FieldGroup className="  flex flex-col items-center justify-center gap-8">
 

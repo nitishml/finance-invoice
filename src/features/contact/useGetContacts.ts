@@ -7,7 +7,7 @@ type ApiResponse = {
     data: {
         contacts: ContactListItem[],
         employeeCount: number;
-        clientCount: number;
+        customerCount: number;
         vendorCount: number;
         pagination: PaginationResponse
     } | null;
