@@ -91,11 +91,10 @@ export const PrintInvoiceContent = ({ data }: Props) => {
                         </div>
                     </Card>
                 </div>
-
-                <div className="w-full flex flex-col items-start justify-between gap-4 bg-custom-secondary-400 rounded-md pb-2">
+                <div className="w-full flex flex-col items-start justify-between gap-4 bg-custom-secondary-400 rounded-md pb-2 text-sm">
                     <div className="w-full flex items-center justify-start gap-4 bg-custom-secondary-600 text-white px-4 py-2 rounded-t-md">
                         <p className="w-4"></p>
-                        <p className="flex-1">Item</p>
+                        <p className="min-w-20">Item</p>
                         <p className="w-12">GST Rate</p>
                         <p className="w-20">Quantity</p>
                         <p className="w-30">Rate</p>
@@ -109,7 +108,7 @@ export const PrintInvoiceContent = ({ data }: Props) => {
                             key={item.id}
                             className="w-full flex items-center justify-start gap-4  text-white px-4 py-2 ">
                             <p className="w-4">{item.order}</p>
-                            <p className="flex-1">{item.title}</p>
+                            <p className="min-w-20">{item.title}</p>
                             <p className="w-12">{item.gstRatio + "%"}</p>
                             <p className="w-20 text-center">{item.quantity}</p>
                             <p className="w-30">{formatRupees(item.rate)}</p>

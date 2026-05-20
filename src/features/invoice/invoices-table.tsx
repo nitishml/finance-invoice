@@ -125,7 +125,7 @@ export function InvoicesTable({ invoices, total, page, limit, setPage, setLimit 
                         </Link>
                     </Button>
                     {row.original.status === "EXPECTED" && (
-                        <PayInvoiceForm invoiceId={row.original.id} />
+                        <PayInvoiceForm invoiceId={row.original.id} dueDate={row.original.dueDate} />
                     )}
                     {row.original.status === "DRAFT" && (
                         <PublishInvoiceForm invoiceId={row.original.id} expectedPaymentDate={row.original.dueDate} />

@@ -30,9 +30,10 @@ import { AccountToggle } from "./account-toggle"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar"
 import { cn, extractInvoiceSerial } from "@/lib/utils"
-import { format } from "date-fns"
-import { CalendarIcon } from "lucide-react"
-import { InvoiceNumberInput, InvoiceNumberWrapper } from "./InvoiceNumberInput"
+import { format, parseISO } from "date-fns"
+import { CalendarIcon, Hash } from "lucide-react"
+import { InvoiceNumberWrapper } from "./InvoiceNumberInput"
+import { Input } from "@/components/ui/input"
 
 export function AddInvoiceForm() {
     const mutation = useAddInvoice()
@@ -46,7 +47,7 @@ export function AddInvoiceForm() {
     const form = useForm<z.infer<typeof addInvoiceFormSchema>>({
         resolver: zodResolver(addInvoiceFormSchema) as any,
         defaultValues: {
-            invoiceDate: new Date(),
+            invoiceDate: format(new Date, "yyyy-MM-dd"),
         }
     })
 
@@ -104,7 +105,7 @@ export function AddInvoiceForm() {
 
                 <FieldGroup>
 
-                    <div className="max-w-lg w-full mx-auto">
+                    <div className="max-w-lg w-full mx-auto space-y-4">
                         <Controller
                             name="description"
                             control={form.control}
@@ -127,6 +128,7 @@ export function AddInvoiceForm() {
                                 </Field>
                             )}
                         />
+
                     </div>
 
                     <div className="max-w-lg w-full mx-auto">
@@ -151,7 +153,7 @@ export function AddInvoiceForm() {
                                                 )}
                                             >
                                                 {field.value ? (
-                                                    format(field.value, "PPP")
+                                                    format(field.value, "PPP")  // parseISO, not new Date()
                                                 ) : (
                                                     <span>Pick a date</span>
                                                 )}
@@ -161,9 +163,10 @@ export function AddInvoiceForm() {
                                         <PopoverContent className="w-full p-0" align="center">
                                             <Calendar
                                                 mode="single"
-                                                selected={field.value}
-                                                onSelect={field.onChange}
-                                                captionLayout="dropdown"
+                                                selected={field.value ? new Date(field.value) : undefined}  // string → Date for display
+                                                onSelect={(date) =>
+                                                    field.onChange(date ? format(date, 'yyyy-MM-dd') : null)  // Date → string for storage
+                                                } captionLayout="dropdown"
                                             />
                                         </PopoverContent>
                                     </Popover>

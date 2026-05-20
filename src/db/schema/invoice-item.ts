@@ -10,6 +10,7 @@ export const invoiceItem = pgTable("invoice_item", {
     order: integer("order").notNull(),
     title: text("title").notNull(),
     description: text("description"),
+    txnId: text("txn_id"),
 
     rate: integer("rate").notNull(), // in paisa
     quantity: integer("quantity").notNull(),

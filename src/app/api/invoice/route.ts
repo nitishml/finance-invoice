@@ -48,7 +48,7 @@ export async function GET(request: NextRequest) {
                 })
                 .from(invoice)
                 .innerJoin(contact, eq(contact.id, invoice.contactId))
-                .orderBy(desc(invoice.createdAt))
+                .orderBy(desc(invoice.invoiceSerial))
                 .where(statusFilter ? eq(
                     invoice.status, statusFilter
                 ) : undefined)
@@ -116,6 +116,11 @@ export async function POST(request: NextRequest) {
                 invoiceSerial: values.invoiceSerial,
 
                 status: "DRAFT",
+                description: values.description,
+
+
+                invoiceDate: new Date(values.invoiceDate),
+                dueDate: new Date(values.invoiceDate),
             })
             .returning({
                 id: contact.id

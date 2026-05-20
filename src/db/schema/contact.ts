@@ -6,15 +6,17 @@ import { contactCategoryEnum } from "./enums";
 
 export const contact = pgTable("contact", {
     id: text("id").primaryKey().$defaultFn(() => createId()),
-
     category: contactCategoryEnum("category"),
-    isExpenseContact: boolean("is_expense_contact").notNull().default(false),
+
     name: text("name").notNull(),
     slug: text("slug").notNull(),
     mobile: text("mobile").notNull(),
-
     email: text("email").notNull(),
+
     gstin: text("gstin"),
+    cin: text("cin"),
+    pan: text("pan"),
+
     address: text("address").notNull(),
     address2: text("address_2"),
 
@@ -22,6 +24,9 @@ export const contact = pgTable("contact", {
     state: text("state").notNull(),
     country: text("country").notNull(),
     zipcode: text("zipcode").notNull(),
+
+    stateCode: text("state_code").notNull(),
+    currencyCode: text("currency_code").notNull().default("INR"),
 
     createdAt: timestamp('created_at', { mode: 'date', withTimezone: true })
         .notNull()

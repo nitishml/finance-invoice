@@ -4,7 +4,9 @@ export type AddItemsToInvoiceDTO = {
     invoiceId: string;
     order: number;
     title: string;
+
     description?: string | null;
+    txnId?: string | null;
 
     rate: number;
     quantity: number;
@@ -22,7 +24,9 @@ export type AddItemsToInvoiceDTO = {
 
 export const addItemFormSchema = z.object({
     title: z.string(),
+
     description: z.string().optional(),
+    txnId: z.string().optional(),
 
     rate: z.coerce.number(),
     quantity: z.coerce.number(),
@@ -33,7 +37,9 @@ export const addItemFormSchema = z.object({
 export const addItemApiSchema = z.object({
     order: z.coerce.number(),
     title: z.string(),
+
     description: z.string().optional(),
+    txnId: z.string().optional(),
 
     rate: z.coerce.number(),
     quantity: z.coerce.number(),

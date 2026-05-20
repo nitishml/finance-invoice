@@ -8,6 +8,41 @@
       "when": 1779032053921,
       "tag": "20260517153413_fine_slapstick",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1779263654745,
+      "tag": "20260520075414_breezy_shadowcat",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1779263733258,
+      "tag": "20260520075533_nappy_daredevil",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1779267116776,
+      "tag": "20260520085156_puzzling_junta",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1779270145403,
+      "tag": "20260520094225_jittery_hiroim",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1779272753829,
+      "tag": "20260520102553_flat_tombstone",
+      "breakpoints": true
     }
   ]
 }

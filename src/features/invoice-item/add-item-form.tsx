@@ -234,7 +234,7 @@ export function AddItemForm({ invoiceId, itemLength }: Props) {
                         </div>
 
                     </div>
-                    <div className="w-full grid grid-cols-1 gap-2 max-w-3xl">
+                    <div className="w-full grid grid-cols-1 gap-4 max-w-3xl">
                         <Controller
                             name="description"
                             control={form.control}
@@ -249,6 +249,33 @@ export function AddItemForm({ invoiceId, itemLength }: Props) {
                                         placeholder="Item description"
                                         aria-invalid={fieldState.invalid}
                                     />
+
+                                    {fieldState.invalid && (
+                                        <FieldError errors={[fieldState.error]} />
+                                    )}
+                                </Field>
+                            )}
+                        />
+                        <Controller
+                            name="txnId"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel htmlFor="txnId">
+                                        Txn ID/Cheq No./Ref No.
+                                    </FieldLabel>
+                                    <div className='relative'>
+                                        <div className='text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 peer-disabled:opacity-50'>
+                                            <Hash className='size-4' />
+                                            <span className='sr-only'>Transaction Id</span>
+                                        </div>
+                                        <Input
+                                            {...field}
+                                            id="txnId"
+                                            aria-invalid={fieldState.invalid}
+                                            className="pl-9 h-10"
+                                        />
+                                    </div>
 
                                     {fieldState.invalid && (
                                         <FieldError errors={[fieldState.error]} />

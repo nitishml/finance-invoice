@@ -21,14 +21,23 @@ import {
 import {
     Input
 } from "@/components/ui/input"
-import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
+import { Field, FieldContent, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { useRouter } from "next/navigation"
 import { Textarea } from "@/components/ui/textarea"
 import { InPageHeader } from "@/components/layout/in-page-header"
 import { QueryLoading } from "@/components/custom-loaders"
 import { addContactFormSchema } from "./types"
 import { useAddContact } from "./useAddContact"
-
+import { Building2, Mail, Phone, PlusCircle, UserLock, UserRound, UserSearch } from "lucide-react"
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectSeparator,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select"
+import { contactCategoryEnum } from "@/db/schema"
 export function AddContactForm() {
     const mutation = useAddContact()
     const [isLoading, setLoading] = useState(false)
@@ -38,8 +47,10 @@ export function AddContactForm() {
         resolver: zodResolver(addContactFormSchema),
         defaultValues: {
             city: "Bengaluru",
-            state: "KARNATAKA",
-            country: "INDIA"
+            state: "Karnataka",
+            country: "India",
+            stateCode: "KA",
+            currencyCode: "INR"
         }
     })
 
@@ -51,12 +62,21 @@ export function AddContactForm() {
             slug: values.slug,
             mobile: values.mobile,
             email: values.email,
+
             gstin: values.gstin,
+            cin: values.cin,
+            pan: values.pan,
+
             address: values.address,
+            address2: values.address2,
+
             city: values.city,
             state: values.state,
             country: values.country,
             zipcode: values.zipcode,
+
+            stateCode: values.stateCode,
+            currencyCode: values.currencyCode,
         }, {
             onSuccess: (data) => {
                 if (data.success && data.data) {
@@ -77,10 +97,50 @@ export function AddContactForm() {
     }
     if (isLoading || mutation.isPending) return <QueryLoading />;
     return (
-        <div className="w-full flex-1 flex flex-col gap-8 items-start justify-center">
+        <div className="w-full flex-1 flex flex-col gap-8 items-center justify-center">
             <InPageHeader label="Add Contact Form" />
-            <form onSubmit={form.handleSubmit(onSubmit)} className=" max-w-6xl  w-full mx-auto">
-                <FieldGroup>
+            <form onSubmit={form.handleSubmit(onSubmit)} className=" w-full">
+                <FieldGroup className="  flex flex-col items-center justify-center gap-8">
+                    <div className="max-w-lg">
+                        <Controller
+                            name="category"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldContent>
+                                        <FieldLabel htmlFor="category">
+                                            Contact Category
+                                        </FieldLabel>
+                                        <FieldDescription>
+                                            used for filtering and analytics
+                                        </FieldDescription>
+                                        {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                                    </FieldContent>
+                                    <Select
+                                        name={field.name}
+                                        value={field.value}
+                                        onValueChange={field.onChange}
+                                    >
+                                        <SelectTrigger
+                                            id="category"
+                                            aria-invalid={fieldState.invalid}
+                                            className="min-w-[120px]"
+                                        >
+                                            <SelectValue placeholder="Select Category" />
+                                        </SelectTrigger>
+                                        <SelectContent position="item-aligned">
+                                            {contactCategoryEnum.enumValues.map((item) => (
+                                                <SelectItem
+                                                    key={item}
+                                                    value={item}>{item}</SelectItem>
+
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </Field>
+                            )}
+                        />
+                    </div>
                     <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2">
                         <Controller
                             name="name"
@@ -90,11 +150,19 @@ export function AddContactForm() {
                                     <FieldLabel htmlFor="name">
                                         Full Name*
                                     </FieldLabel>
-                                    <Input
-                                        {...field}
-                                        id="name"
-                                        aria-invalid={fieldState.invalid}
-                                    />
+
+                                    <div className='relative'>
+                                        <div className='text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 peer-disabled:opacity-50'>
+                                            <Building2 className='size-4' />
+                                            <span className='sr-only'>Name</span>
+                                        </div>
+                                        <Input
+                                            {...field}
+                                            id="name"
+                                            aria-invalid={fieldState.invalid}
+                                            className="pl-9 h-12 border-foreground"
+                                        />
+                                    </div>
                                     {fieldState.invalid && (
                                         <FieldError errors={[fieldState.error]} />
                                     )}
@@ -109,11 +177,19 @@ export function AddContactForm() {
                                     <FieldLabel htmlFor="slug">
                                         Slug/Id/Alias*
                                     </FieldLabel>
-                                    <Input
-                                        {...field}
-                                        id="slug"
-                                        aria-invalid={fieldState.invalid}
-                                    />
+                                    <div className='relative'>
+                                        <div className='text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 peer-disabled:opacity-50'>
+                                            <UserSearch className='size-4' />
+                                            <span className='sr-only'>Slug</span>
+                                        </div>
+                                        <Input
+                                            {...field}
+                                            id="slug"
+                                            aria-invalid={fieldState.invalid}
+                                            className="pl-9 h-12 border-foreground"
+                                        />
+                                    </div>
+
                                     {fieldState.invalid && (
                                         <FieldError errors={[fieldState.error]} />
                                     )}
@@ -130,11 +206,20 @@ export function AddContactForm() {
                                     <FieldLabel htmlFor="mobile">
                                         Mobile*
                                     </FieldLabel>
-                                    <Input
-                                        {...field}
-                                        id="mobile"
-                                        aria-invalid={fieldState.invalid}
-                                    />
+
+                                    <div className='relative'>
+                                        <div className='text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 peer-disabled:opacity-50'>
+                                            <Phone className='size-4' />
+                                            <span className='sr-only'>mobile</span>
+                                        </div>
+                                        <Input
+                                            {...field}
+                                            id="mobile"
+                                            aria-invalid={fieldState.invalid}
+                                            className="pl-9 h-12 border-foreground"
+                                        />
+                                    </div>
+
                                     {fieldState.invalid && (
                                         <FieldError errors={[fieldState.error]} />
                                     )}
@@ -149,11 +234,18 @@ export function AddContactForm() {
                                     <FieldLabel htmlFor="email">
                                         Email*
                                     </FieldLabel>
-                                    <Input
-                                        {...field}
-                                        id="email"
-                                        aria-invalid={fieldState.invalid}
-                                    />
+                                    <div className='relative'>
+                                        <div className='text-muted-foreground pointer-events-none absolute inset-y-0 left-0 flex items-center justify-center pl-3 peer-disabled:opacity-50'>
+                                            <Mail className='size-4' />
+                                            <span className='sr-only'>mobile</span>
+                                        </div>
+                                        <Input
+                                            {...field}
+                                            id="email"
+                                            aria-invalid={fieldState.invalid}
+                                            className="pl-9 h-12 border-foreground"
+                                        />
+                                    </div>
                                     {fieldState.invalid && (
                                         <FieldError errors={[fieldState.error]} />
                                     )}
@@ -161,7 +253,7 @@ export function AddContactForm() {
                             )}
                         />
                     </div>
-                    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2">
+                    <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-2">
                         <Controller
                             name="gstin"
                             control={form.control}
@@ -173,6 +265,152 @@ export function AddContactForm() {
                                     <Input
                                         {...field}
                                         id="gstin"
+                                        aria-invalid={fieldState.invalid}
+                                    />
+                                    {fieldState.invalid && (
+                                        <FieldError errors={[fieldState.error]} />
+                                    )}
+                                </Field>
+                            )}
+                        />
+                        <Controller
+                            name="cin"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel htmlFor="cin">
+                                        CIN
+                                    </FieldLabel>
+                                    <Input
+                                        {...field}
+                                        id="cin"
+                                        aria-invalid={fieldState.invalid}
+                                    />
+                                    {fieldState.invalid && (
+                                        <FieldError errors={[fieldState.error]} />
+                                    )}
+                                </Field>
+                            )}
+                        />
+                        <Controller
+                            name="pan"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel htmlFor="pan">
+                                        PAN
+                                    </FieldLabel>
+                                    <Input
+                                        {...field}
+                                        id="pan"
+                                        aria-invalid={fieldState.invalid}
+                                    />
+                                    {fieldState.invalid && (
+                                        <FieldError errors={[fieldState.error]} />
+                                    )}
+                                </Field>
+                            )}
+                        />
+
+                    </div>
+                    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2">
+
+                        <Controller
+                            name="address"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel htmlFor="address">
+                                        Address Line 1*
+                                    </FieldLabel>
+                                    <Textarea
+                                        {...field}
+                                        id="address"
+                                        placeholder="Official Address"
+                                        aria-invalid={fieldState.invalid}
+                                    />
+
+                                    {fieldState.invalid && (
+                                        <FieldError errors={[fieldState.error]} />
+                                    )}
+                                </Field>
+                            )}
+                        />
+                        <Controller
+                            name="address2"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel htmlFor="address2">
+                                        Address Line 2
+                                    </FieldLabel>
+                                    <Textarea
+                                        {...field}
+                                        id="address2"
+                                        aria-invalid={fieldState.invalid}
+                                    />
+
+                                    {fieldState.invalid && (
+                                        <FieldError errors={[fieldState.error]} />
+                                    )}
+                                </Field>
+                            )}
+                        />
+                    </div>
+                    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <Controller
+                            name="city"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel htmlFor="city">
+                                        City*
+                                    </FieldLabel>
+                                    <Input
+                                        {...field}
+                                        id="city"
+                                        aria-invalid={fieldState.invalid}
+                                    />
+                                    {fieldState.invalid && (
+                                        <FieldError errors={[fieldState.error]} />
+                                    )}
+                                </Field>
+                            )}
+                        />
+
+                        <Controller
+                            name="state"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel htmlFor="state">
+                                        State*
+                                    </FieldLabel>
+                                    <Input
+                                        {...field}
+                                        id="state"
+                                        aria-invalid={fieldState.invalid}
+                                    />
+                                    {fieldState.invalid && (
+                                        <FieldError errors={[fieldState.error]} />
+                                    )}
+                                </Field>
+                            )}
+                        />
+
+                    </div>
+                    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <Controller
+                            name="country"
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <Field data-invalid={fieldState.invalid}>
+                                    <FieldLabel htmlFor="country">
+                                        Country*
+                                    </FieldLabel>
+                                    <Input
+                                        {...field}
+                                        id="country"
                                         aria-invalid={fieldState.invalid}
                                     />
                                     {fieldState.invalid && (
@@ -202,18 +440,17 @@ export function AddContactForm() {
                         />
                     </div>
                     <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2">
-
                         <Controller
-                            name="state"
+                            name="stateCode"
                             control={form.control}
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor="state">
-                                        State*
+                                    <FieldLabel htmlFor="stateCode">
+                                        State Code*
                                     </FieldLabel>
                                     <Input
                                         {...field}
-                                        id="state"
+                                        id="stateCode"
                                         aria-invalid={fieldState.invalid}
                                     />
                                     {fieldState.invalid && (
@@ -223,61 +460,18 @@ export function AddContactForm() {
                             )}
                         />
                         <Controller
-                            name="city"
+                            name="currencyCode"
                             control={form.control}
                             render={({ field, fieldState }) => (
                                 <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor="city">
-                                        City*
+                                    <FieldLabel htmlFor="currencyCode">
+                                        Currency Code*
                                     </FieldLabel>
                                     <Input
                                         {...field}
-                                        id="city"
+                                        id="currencyCode"
                                         aria-invalid={fieldState.invalid}
                                     />
-                                    {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
-                                    )}
-                                </Field>
-                            )}
-                        />
-                    </div>
-                    <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-2">
-
-                        <Controller
-                            name="country"
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor="country">
-                                        Country*
-                                    </FieldLabel>
-                                    <Input
-                                        {...field}
-                                        id="country"
-                                        aria-invalid={fieldState.invalid}
-                                    />
-                                    {fieldState.invalid && (
-                                        <FieldError errors={[fieldState.error]} />
-                                    )}
-                                </Field>
-                            )}
-                        />
-                        <Controller
-                            name="address"
-                            control={form.control}
-                            render={({ field, fieldState }) => (
-                                <Field data-invalid={fieldState.invalid}>
-                                    <FieldLabel htmlFor="address">
-                                        Address
-                                    </FieldLabel>
-                                    <Textarea
-                                        {...field}
-                                        id="address"
-                                        placeholder="Official Address"
-                                        aria-invalid={fieldState.invalid}
-                                    />
-
                                     {fieldState.invalid && (
                                         <FieldError errors={[fieldState.error]} />
                                     )}
@@ -289,9 +483,10 @@ export function AddContactForm() {
                         size={'lg'}
                         type="submit"
                         variant={'default'}
-                        className=" max-w-sm w-full"
+                        className=" max-w-sm w-full h-12"
                         disabled={isLoading}
                     >
+                        <PlusCircle />
                         SUBMIT
                     </Button>
                 </FieldGroup>
