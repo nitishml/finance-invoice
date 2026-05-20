@@ -41,7 +41,9 @@ export async function POST(
                 invoiceId,
                 title: values.title,
                 order: values.order,
+
                 description: values.description,
+                txnId: values.txnId,
 
                 rate: values.rate * 100,
                 quantity: values.quantity,

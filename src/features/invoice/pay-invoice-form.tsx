@@ -35,8 +35,9 @@ import { Textarea } from "@/components/ui/textarea";
 
 type Props = {
     invoiceId: string;
+    dueDate: Date,
 }
-export const PayInvoiceForm = ({ invoiceId }: Props) => {
+export const PayInvoiceForm = ({ invoiceId, dueDate }: Props) => {
     const mutation = usePayInvoice()
     const [isLoading, setLoading] = useState(false)
     // const router = useRouter()
@@ -44,7 +45,7 @@ export const PayInvoiceForm = ({ invoiceId }: Props) => {
     const form = useForm<z.infer<typeof payInvoiceFormSchema>>({
         resolver: zodResolver(payInvoiceFormSchema) as any,
         defaultValues: {
-            paymentDate: new Date(),
+            paymentDate: dueDate,
         }
     })
 

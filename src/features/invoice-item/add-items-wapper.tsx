@@ -125,7 +125,7 @@ export const AddItemsWrapper = ({ invoiceId }: Props) => {
                         <BookmarkCheck />
                         Save Draft
                     </Button> */}
-                        <PublishInvoiceForm invoiceId={invoiceId} expectedPaymentDate={data.invoice.dueDate} lg />
+                        <PublishInvoiceForm invoiceId={invoiceId} expectedPaymentDate={data.invoice.invoiceDate} lg />
                     </div>
                 </div>
             )}

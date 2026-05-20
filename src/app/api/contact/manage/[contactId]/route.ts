@@ -26,19 +26,27 @@ export async function GET(
         const [data] = await db
             .select({
                 id: contact.id,
+                category: contact.category,
+
                 name: contact.name,
                 slug: contact.slug,
-
                 mobile: contact.mobile,
                 email: contact.email,
+
                 gstin: contact.gstin,
+                cin: contact.cin,
+                pan: contact.pan,
 
                 address: contact.address,
                 address2: contact.address2,
+
                 zipcode: contact.zipcode,
                 city: contact.city,
                 state: contact.state,
                 country: contact.country,
+
+                stateCode: contact.stateCode,
+                currencyCode: contact.currencyCode,
             })
             .from(contact)
             .where(eq(contact.id, contactId))

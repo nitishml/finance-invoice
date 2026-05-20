@@ -21,7 +21,6 @@ export async function GET(request: NextRequest) {
                 slug: contact.slug,
                 mobile: contact.mobile,
                 city: contact.city,
-                isExpenseContact: contact.isExpenseContact
             })
             .from(contact)
             .orderBy(desc(contact.createdAt))
@@ -69,7 +68,6 @@ export async function POST(request: NextRequest) {
             .insert(contact)
             .values({
                 ...values
-
             })
             .returning({
                 id: contact.id

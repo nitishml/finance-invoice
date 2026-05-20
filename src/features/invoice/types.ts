@@ -6,13 +6,14 @@ export type AddInvoiceDTO = {
     account: typeof accountEnum.enumValues[number];
     invoiceNumber: string;
     invoiceSerial: number;
-    invoiceDate: Date;
+    invoiceDate: Date | string;
     description?: string | null;
 }
 
 export const addInvoiceFormSchema = z.object({
     description: z.string().optional(),
-    invoiceDate: z.coerce.date(),
+    invoiceDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format'),
+
 })
 
 export const addInvoiceApiSchema = z.object({
@@ -22,7 +23,8 @@ export const addInvoiceApiSchema = z.object({
     invoiceNumber: z.string(),
     invoiceSerial: z.coerce.number(),
     description: z.string().optional(),
-    invoiceDate: z.coerce.date(),
+
+    invoiceDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Invalid date format'),
 })
 
 export type InvoiceListItem = {

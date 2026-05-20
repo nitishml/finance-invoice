@@ -59,7 +59,7 @@ export const InvoiceNumberInput = ({ maxSerial, setInvoiceNumber }: Props) => {
                 id="invoiceNumber"
                 type="text"
                 placeholder="format: GS-xxx-A"
-                value={nextSerial}
+                value={temp}
                 onChange={(e) => setTemp(e.target.value)}
                 className='-me-px rounded-r-none shadow-none focus-visible:z-1'
             />

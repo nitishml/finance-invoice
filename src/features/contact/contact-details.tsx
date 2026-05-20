@@ -6,28 +6,30 @@ import { format } from "date-fns";
 import { DataDisplay, SoftDataDisplay } from "@/components/data-display";
 import { DataError, QueryLoading } from "@/components/custom-loaders";
 import { useGetContactDetails } from "./useGetContactDetails";
+import { ChartNetwork, FileText, UserPen } from "lucide-react";
+import { ComponentActions } from "@/components/actions-list";
 
 type Props = {
     contactId: string
 }
 export const ContactDetails = ({ contactId }: Props) => {
-    // const actions = [
-    //     {
-    //         label: 'Attendance',
-    //         href: `/staff/office/student/manage/${studentId}`,
-    //         icon: <ListChecks />,
-    //     },
-    //     {
-    //         label: 'Academia',
-    //         href: `/staff/office/student/manage/${studentId}`,
-    //         icon: <HiOutlineAcademicCap />,
-    //     },
-    //     {
-    //         label: 'Manage',
-    //         href: `/staff/office/student/manage/${studentId}`,
-    //         icon: <UserRoundCog />,
-    //     },
-    // ];
+    const actions = [
+        {
+            label: 'Edit',
+            href: `/contacts/manage/${contactId}/edit`,
+            icon: <UserPen />,
+        },
+        {
+            label: 'Invoices',
+            href: `/contacts/manage/${contactId}/invoices`,
+            icon: <FileText />,
+        },
+        {
+            label: 'Analytics',
+            href: `/contacts/manage/${contactId}/analytics`,
+            icon: <ChartNetwork />,
+        },
+    ];
     const query = useGetContactDetails({ contactId })
 
     const isDisabled = query.isLoading || query.isPending || query.isFetching
@@ -38,9 +40,7 @@ export const ContactDetails = ({ contactId }: Props) => {
     //console.log(data.name)
     return (
         <div className='flex flex-col items-center justify-start gap-4 w-full'>
-
             <div className='w-full flex flex-col md:flex-row items-center justify-between gap-4'>
-
                 <Card className='flex-1 p-4 border-none shadow-md flex flex-col md:flex-row items-center md:items-start justify-between '>
                     <div className='flex flex-col items-start pt-4 justify-center gap-4'>
                         <h1 className='text-xl md:text-3xl font-bold'>
@@ -57,14 +57,12 @@ export const ContactDetails = ({ contactId }: Props) => {
                         </AspectRatio>
                     </div>
                 </Card>
-                {/* <ComponentActions actions={actions} /> */}
+                <ComponentActions actions={actions} />
             </div>
 
             <div className='w-full flex flex-col md:flex-row items-center justify-center gap-4'>
                 <Card className='w-full md:w-1/2 p-4 border-none shadow-md flex flex-col items-center justify-center gap-4'>
                     <DataDisplay title='Mobile' value={data.mobile} />
-                    {/* <DataDisplay title='Alternate Contact' value={data.alternateMobile} /> */}
-                    {/* <DataDisplay title='Batch' value={data.batch} /> */}
                 </Card>
 
                 <Card className='w-full md:w-1/2  p-4 border-none shadow-md flex flex-col items-center justify-center gap-4 '>
@@ -72,27 +70,36 @@ export const ContactDetails = ({ contactId }: Props) => {
                 </Card>
             </div>
 
-            <div className='w-full grid grid-cols-1 md:grid-cols-2 items-stretch justify-center gap-4'>
+            <Card className="w-full p-4">
+                <div className='w-full flex flex-col md:flex-row items-center justify-center gap-4'>
+                    <SoftDataDisplay title='GSTIN' value={data.gstin} />
+                    <SoftDataDisplay title='CIN' value={data.cin} />
+                    <SoftDataDisplay title='PAN' value={data.pan} />
+                </div>
+            </Card>
 
-                <Card className=' p-4 border-none shadow-md flex flex-col items-center justify-stretch gap-4'>
-                    <SoftDataDisplay title={`Address`} value={data.address} />
-                    <SoftDataDisplay title={`Zip code`} value={data.zipcode} />
-
-                </Card>
-
-                <Card className=' p-4 border-none shadow-md flex flex-col items-center justify-stretch gap-4'>
-                    <SoftDataDisplay title={`City/Town/District`} value={data.city} />
-                    <SoftDataDisplay title={`State`} value={data.state} />
-                    <SoftDataDisplay title={`Nationality`} value={data.country} />
-
-                </Card>
-
-
-
-            </div>
-
-
-
+            <Card className="w-full p-4">
+                <div className='w-full flex flex-col md:flex-row items-center justify-center gap-4'>
+                    <SoftDataDisplay title='Address Line 1' value={data.address} />
+                    <SoftDataDisplay title='Address Line 2' value={data.address2} />
+                </div>
+                <div className='w-full flex flex-col md:flex-row items-center justify-center gap-4'>
+                    <div className='w-full flex flex-col items-center justify-center gap-4'>
+                        <SoftDataDisplay title='City/Town/District' value={data.city} />
+                        <SoftDataDisplay title='State' value={data.state} />
+                    </div>
+                    <div className='w-full flex flex-col items-center justify-center gap-4'>
+                        <SoftDataDisplay title='Country' value={data.country} />
+                        <SoftDataDisplay title='Zip Code' value={data.zipcode} />
+                    </div>
+                </div>
+            </Card>
+            <Card className="w-full p-4">
+                <div className='w-full flex flex-col md:flex-row items-center justify-center gap-4'>
+                    <DataDisplay title='State Code' value={data.stateCode} />
+                    <DataDisplay title='Currency Code' value={data.currencyCode} />
+                </div>
+            </Card>
         </div>
     );
 }

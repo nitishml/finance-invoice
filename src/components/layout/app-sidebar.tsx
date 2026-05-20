@@ -81,10 +81,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                         {routes.map((item, idx) => (
                             <SidebarMenuItem key={idx} >
                                 <SidebarMenuButton tooltip={item.title} isActive={item.url === route} asChild>
-                                    <Link href={item.url} onClick={() => setOpen(false)}>
+                                    <a href={item.url} onClick={() => setOpen(false)}>
                                         <item.icon />
                                         <span>{item.title}</span>
-                                    </Link>
+                                    </a>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
                         ))}

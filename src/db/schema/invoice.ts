@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { boolean, index, integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { boolean, date, index, integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
 import { user, accountEnum, invoiceStatusEnum, invoiceItem, contact, invoiceCategoryEnum } from "./";
 import { createId } from "@/lib/nanoid-gen";
 
@@ -20,11 +20,11 @@ export const invoice = pgTable("invoice", {
     sgst: integer("sgst").notNull().default(0), //in paisa
     total: integer("total").notNull().default(0), //in paisa
 
-    invoiceDate: timestamp('invoice_date', { mode: 'date', withTimezone: true }).notNull().defaultNow(),
-    dueDate: timestamp('due_date', { mode: 'date', withTimezone: true }).notNull().defaultNow(),
-    paymentDate: timestamp('payment_date', { mode: 'date', withTimezone: true }),
-    cancelledDate: timestamp('cancelled_date', { mode: 'date', withTimezone: true }),
-    arrearedDate: timestamp('arreared_date', { mode: 'date', withTimezone: true }),
+    invoiceDate: date('invoice_date', { mode: 'date' }).notNull().defaultNow(),
+    dueDate: date('due_date', { mode: 'date' }).notNull().defaultNow(),
+    paymentDate: date('payment_date', { mode: 'date' }),
+    cancelledDate: date('cancelled_date', { mode: 'date' }),
+    arrearedDate: date('arreared_date', { mode: 'date' }),
 
     invoiceCategory: invoiceCategoryEnum("invoice_category"),
     description: text("description"),
