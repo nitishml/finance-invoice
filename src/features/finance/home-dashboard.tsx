@@ -31,7 +31,7 @@ export const HomeDashboard = () => {
                     <span className="text-3xl font-semibold">{formatRupees(balance)}</span>
                 </div>
             </Card>
-            <div className="w-full flex items-center justify-center gap-8 ">
+            <div className="w-full flex flex-col md:flex-row items-center justify-center gap-8 ">
                 <Card className="p-0 max-w-md border-rose-500 border-2 w-full">
                     <div className="w-full p-8 flex flex-col items-stretch justify-start gap-4">
                         <h2 className="text-xl font-bold">Total Expenses</h2>
@@ -48,15 +48,15 @@ export const HomeDashboard = () => {
             </div>
             <Card className="p-8 pt-4  max-w-xl w-full ">
                 <CardTitle>{format(today, "MMMM")}</CardTitle>
-                <div className="w-full flex items-center justify-center gap-8 ">
-                    <Stat className="w-[400px] border-rose-500">
+                <div className="w-full flex flex-col md:flex-row items-center justify-center gap-8 ">
+                    <Stat className="w-[200px] md:w-[400px] border-rose-500">
                         <StatLabel>Expected Expense</StatLabel>
                         <StatValue>{formatRupees(data.expectedMonthlyExpense)}</StatValue>
                         <StatIndicator variant="icon" color="warning">
                             {data.expectedMonthyExpenseCount}
                         </StatIndicator>
                     </Stat>
-                    <Stat className="w-[400px] border-emerald-500">
+                    <Stat className="w-[200px] md:w-[400px] border-emerald-500">
                         <StatLabel>Expected Income</StatLabel>
                         <StatValue>{formatRupees(data.expectedMonthlyIncome)}</StatValue>
                         <StatIndicator variant="icon" color="success">

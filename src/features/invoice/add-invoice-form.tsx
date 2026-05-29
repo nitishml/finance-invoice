@@ -13,11 +13,9 @@ import {
     zodResolver
 } from "@hookform/resolvers/zod"
 import * as z from "zod"
-
 import {
     Button
 } from "@/components/ui/button"
-
 import { Field, FieldDescription, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { useRouter } from "next/navigation"
 import { Textarea } from "@/components/ui/textarea"
@@ -25,21 +23,21 @@ import { InPageHeader } from "@/components/layout/in-page-header"
 import { QueryLoading } from "@/components/custom-loaders"
 import { addInvoiceFormSchema } from "./types"
 import { useAddInvoice } from "./useAddInvoice"
-import { ContactPicker } from "./contact-picker"
 import { AccountToggle } from "./account-toggle"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar"
 import { cn, extractInvoiceSerial } from "@/lib/utils"
-import { format, parseISO } from "date-fns"
-import { CalendarIcon, Hash } from "lucide-react"
+import { format, } from "date-fns"
+import { CalendarIcon } from "lucide-react"
 import { InvoiceNumberWrapper } from "./InvoiceNumberInput"
-import { Input } from "@/components/ui/input"
 
-export function AddInvoiceForm() {
+type Props = {
+    contactId: string
+}
+export function AddInvoiceForm({ contactId }: Props) {
     const mutation = useAddInvoice()
     const [isLoading, setLoading] = useState(false)
     const [account, setAccount] = useState<"INCOME" | "EXPENSE">("INCOME")
-    const [contactId, setContactId] = useState<string | null>(null)
     const [invoiceNumber, setInvoiceNumber] = useState<string | null>(null)
 
     const router = useRouter()
@@ -47,7 +45,7 @@ export function AddInvoiceForm() {
     const form = useForm<z.infer<typeof addInvoiceFormSchema>>({
         resolver: zodResolver(addInvoiceFormSchema) as any,
         defaultValues: {
-            invoiceDate: format(new Date, "yyyy-MM-dd"),
+            invoiceDate: format(new Date("02-02-2025"), "yyyy-MM-dd"),
         }
     })
 
@@ -67,7 +65,7 @@ export function AddInvoiceForm() {
             onSuccess: (data) => {
                 if (data.success && data.data) {
                     toast.success("Invoice Created")
-                    router.push(`/invoices/add/${data.data.id}`)
+                    router.push(`/invoices/add/process/${data.data.id}`)
                 }
                 else {
                     toast.error(data.message || "Please try again")
@@ -88,7 +86,6 @@ export function AddInvoiceForm() {
             <form onSubmit={form.handleSubmit(onSubmit)} className=" max-w-6xl  w-full mx-auto space-y-4">
                 <AccountToggle account={account} setAccount={setAccount} />
 
-                <ContactPicker setContactId={setContactId} />
                 <FieldGroup className={cn("w-full max-w-lg mx-auto p-4 mb border rounded-md",
                     invoiceNumber ? " border-emerald-500" : " border-rose-500"
                 )}>
@@ -163,10 +160,13 @@ export function AddInvoiceForm() {
                                         <PopoverContent className="w-full p-0" align="center">
                                             <Calendar
                                                 mode="single"
-                                                selected={field.value ? new Date(field.value) : undefined}  // string → Date for display
+                                                selected={field.value ? new Date(field.value) : undefined}
                                                 onSelect={(date) =>
-                                                    field.onChange(date ? format(date, 'yyyy-MM-dd') : null)  // Date → string for storage
-                                                } captionLayout="dropdown"
+                                                    field.onChange(date ? format(date, 'yyyy-MM-dd') : null)
+                                                }
+                                                captionLayout="dropdown"
+                                                defaultMonth={new Date(field.value)}
+
                                             />
                                         </PopoverContent>
                                     </Popover>

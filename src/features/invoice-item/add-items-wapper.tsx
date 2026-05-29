@@ -57,7 +57,7 @@ export const AddItemsWrapper = ({ invoiceId }: Props) => {
 
     return (
         <div className="w-full space-y-8 ">
-            <div className="w-full grid grid-cols-2 items-start justify-between">
+            <div className="w-full grid grid-cols-1 md:grid-cols-2 items-start justify-between">
                 <div className="flex flex-col items-start justify-between gap-4">
                     <h1 className="text-2xl font-bold">Invoice</h1>
 
@@ -93,12 +93,12 @@ export const AddItemsWrapper = ({ invoiceId }: Props) => {
                 </Card>
             </div>
             {data.invoice.status === "DRAFT" && (
-                <div className="w-full flex items-start justify-between gap-4">
+                <div className="w-full flex flex-col md:flex-row items-start justify-between gap-4">
 
                     <AddItemForm invoiceId={invoiceId} itemLength={data.items.length} />
 
 
-                    <div className="flex flex-col items-end justify-start gap-4">
+                    <div className="w-full flex flex-col items-center md:items-end justify-start gap-4">
                         <div className='flex flex-col items-center justify-center w-[200px] border border-foreground rounded-md'>
                             <div className='h-8 w-full bg-cyan-500 text-white rounded-md rounded-b-none text-center text-base py-1'>
                                 {"Invoice Amount"}

@@ -3,11 +3,8 @@ import { Dispatch, SetStateAction } from "react";
 import { useGetContacts } from "../contact/useGetContacts";
 import { DataError, QueryLoading } from "@/components/custom-loaders";
 import { ContactListItem } from "../contact/types";
-import { useId, useState } from 'react'
-
-import { CheckIcon, ChevronDownIcon, ChevronsUpDownIcon } from 'lucide-react'
-
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { useState } from 'react'
+import { CheckIcon, ChevronDownIcon, } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
     Command,
@@ -17,7 +14,6 @@ import {
     CommandItem,
     CommandList
 } from '@/components/ui/command'
-import { Label } from '@/components/ui/label'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { cn } from "@/lib/utils";
 

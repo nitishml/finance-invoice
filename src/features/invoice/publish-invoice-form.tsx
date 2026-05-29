@@ -80,7 +80,7 @@ export const PublishInvoiceForm = ({ invoiceId, expectedPaymentDate, lg }: Props
             <DialogTrigger asChild>
                 <Button
                     variant="publish_item" size={lg ? "lg" : "sm"}
-                    className={cn("px-4", lg && "w-[200px] h-10")}
+                    className={cn("px-4", lg && "w-[240px] h-14")}
                 >
                     <SendHorizontal className="w-4 h-4" />
                     Publish
