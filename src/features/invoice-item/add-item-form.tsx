@@ -41,7 +41,8 @@ export function AddItemForm({ invoiceId, itemLength }: Props) {
     const form = useForm<z.infer<typeof addItemFormSchema>>({
         resolver: zodResolver(addItemFormSchema) as any,
         defaultValues: {
-
+            quantity: 1,
+            gstRatio: 0,
         }
     })
 
