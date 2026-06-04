@@ -65,8 +65,8 @@ export function InvoicesTable({ invoices, total, page, limit, setPage, setLimit 
             cell: ({ row }) => (
                 <div className="flex items-start justify-start gap-2">
                     <div className={cn("w-2 h-10",
-                        row.original.account === "INCOME" && "bg-emerald-500",
-                        row.original.account === "EXPENSE" && "bg-rose-500",
+                        row.original.invoiceType === "INCOME" && "bg-emerald-500",
+                        row.original.invoiceType === "EXPENSE" && "bg-rose-500",
                     )}>
 
                     </div>
