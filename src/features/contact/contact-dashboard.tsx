@@ -14,13 +14,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export const ContactDashboard = () => {
-    const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1))
-    const [limit, setLimit] = useQueryState('limit', parseAsInteger.withDefault(25))
-
-    const query = useGetContacts({
-        page,
-        limit,
-    })
+    const query = useGetContacts()
 
     const isLoading = query.isLoading || query.isPending || query.isFetching
     if (isLoading) return <QueryLoading />
@@ -28,33 +22,37 @@ export const ContactDashboard = () => {
     if (!query.data || !query.data.data) return <DataError />
     const data = query.data.data
 
+    const employeeCount = data.contacts.filter((contact) => contact.category === "EMPLOYEE").length
+    const customerCount = data.contacts.filter((contact) => contact.category === "CUSTOMER").length
+    const vendorCount = data.contacts.filter((contact) => contact.category === "VENDOR").length
+
     return (
         <div className="w-full space-y-4">
             <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4   gap-6 items-end">
                 <Stat>
                     <StatLabel>Total</StatLabel>
-                    <StatValue>{data.pagination.total}</StatValue>
+                    <StatValue>{data.contacts.length}</StatValue>
                     <StatIndicator variant="icon" color="success">
                         <Users />
                     </StatIndicator>
                 </Stat>
                 <Stat>
                     <StatLabel>Employees</StatLabel>
-                    <StatValue>{data.employeeCount}</StatValue>
+                    <StatValue>{employeeCount}</StatValue>
                     <StatIndicator variant="icon" color="success">
                         <Users />
                     </StatIndicator>
                 </Stat>
                 <Stat>
                     <StatLabel>Customers</StatLabel>
-                    <StatValue>{data.customerCount}</StatValue>
+                    <StatValue>{customerCount}</StatValue>
                     <StatIndicator variant="icon" color="success">
                         <Users />
                     </StatIndicator>
                 </Stat>
                 <Stat>
                     <StatLabel>Vendors</StatLabel>
-                    <StatValue>{data.vendorCount}</StatValue>
+                    <StatValue>{vendorCount}</StatValue>
                     <StatIndicator variant="icon" color="success">
                         <Users />
                     </StatIndicator>
@@ -77,11 +75,6 @@ export const ContactDashboard = () => {
             </div>
             <ContactsTable
                 contacts={data.contacts}
-                total={data.pagination.total}
-                page={data.pagination.page}
-                limit={data.pagination.limit}
-                setPage={setPage}
-                setLimit={setLimit}
             />
         </div>
     );

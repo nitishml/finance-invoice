@@ -1,17 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { PaginationResponse } from "@/types/generic-props";
-import { ContactListItem } from "./types";
+import { AccountListItem } from "../types";
 
 type ApiResponse = {
     success: boolean;
-    data: {
-        contacts: ContactListItem[],
-    } | null;
+    data: AccountListItem[] | null;
     message?: string;
 }
 
-async function fetchContacts(): Promise<ApiResponse> {
-    const response = await fetch(`/api/contact`, {
+async function fetchAccounts(): Promise<ApiResponse> {
+    const response = await fetch(`/api/financial-account`, {
         method: 'GET',
         credentials: 'include',
         headers: {
@@ -28,10 +25,10 @@ async function fetchContacts(): Promise<ApiResponse> {
     return data
 }
 
-export function useGetContacts() {
+export function useGetAccounts() {
     return useQuery({
-        queryKey: ['contacts'],
-        queryFn: () => fetchContacts(),
+        queryKey: ['accounts'],
+        queryFn: () => fetchAccounts(),
         retry: (failureCount, error) => {
             if (error.message.includes('401') || error.message.includes('403')) {
                 return false;

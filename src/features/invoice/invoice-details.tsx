@@ -7,6 +7,9 @@ import { useSaveDraftInvoice } from "../invoice/useSaveInvoice";
 import { useState } from "react";
 import { useGetInvoiceDetails } from "./useGetInvoiceDetails";
 import { DownloadPdfButton } from "./print/download-button";
+import { PlusSquare } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 type Props = {
     invoiceId: string;
@@ -62,17 +65,18 @@ export const InvoiceDetails = ({ invoiceId }: Props) => {
                     </div>
                     <div className="w-full flex items-center justify-start gap-4">
                         <p className="w-[150px]">
-                            {"Status"}
+                            {"Category"}
                         </p>
                         <p className="font-bold">
-                            {data.status}
+                            {data.invoiceCategory}
                         </p>
-                    </div><div className="w-full flex items-center justify-start gap-4">
+                    </div>
+                    <div className="w-full flex items-center justify-start gap-4">
                         <p className="w-[150px]">
-                            {"Status"}
+                            {"Type"}
                         </p>
                         <p className="font-bold">
-                            {data.status}
+                            {data.invoiceType}
                         </p>
                     </div>
                     {data.paymentDate && (
@@ -99,7 +103,7 @@ export const InvoiceDetails = ({ invoiceId }: Props) => {
                 <div className="flex flex-col items-end justify-between gap-4">
 
 
-                    <div className="w-full grid grid-cols-2 items-stretch justify-between gap-4">
+                    <div className="w-full  items-stretch justify-between gap-4">
                         {/* <Card className="p-4 bg-custom-secondary-200  rounded-sm">
                     <div className="w-full flex flex-col items-start justify-center">
                         <h2 className="text-xl font-bold">Billed By</h2>
@@ -112,11 +116,12 @@ export const InvoiceDetails = ({ invoiceId }: Props) => {
 
                     </div>
                 </Card> */}
+
                         <Card className="p-4 bg-custom-secondary-200  rounded-sm">
                             <div className="w-full flex flex-col items-start justify-center">
-                                <h2 className="text-xl font-bold">Contact</h2>
+                                <h2 className="text-xl font-bold mb-2">Contact | {data.contactCategory}</h2>
 
-                                <p className="font-bold text-base">{data.name}</p>
+                                <p className="font-bold text-base mb-1">{data.name}</p>
                                 <p>{data.address}</p>
                                 {data.address2 && (<p>{data.address2}</p>)}
                                 <p>{data.city + ", " + data.state}</p>
@@ -128,8 +133,19 @@ export const InvoiceDetails = ({ invoiceId }: Props) => {
 
                 </div>
             </div>
-            <DownloadPdfButton invoiceId={invoiceId} />
-
+            <div className="w-full flex items-center justify-between gap-4">
+                <DownloadPdfButton invoiceId={invoiceId} />
+                <Button
+                    className="h-12 w-[250px]"
+                    size={'lg'}
+                    asChild
+                >
+                    <Link href={`/invoices/manage/${invoiceId}/journal-entry`}>
+                        <PlusSquare />
+                        Make Journal Entry
+                    </Link>
+                </Button>
+            </div>
 
             <div className="w-full flex flex-col items-start justify-between gap-4 bg-custom-secondary-400 rounded-md pb-2">
                 <div className="w-full flex items-center justify-start gap-4 bg-custom-secondary-600 text-white px-4 py-2 rounded-t-md">
@@ -159,7 +175,7 @@ export const InvoiceDetails = ({ invoiceId }: Props) => {
                     </div>
                 ))}
             </div>
-            <div className="w-full flex items-center justify-end">
+            <div className="w-full flex items-center justify-center">
                 <div className="w-full flex flex-col items-center justify-center gap-4 max-w-[400px]  border p-4 rounded-md shadow-md shadow-custom-secondary-500">
                     <div className="w-full flex items-center justify-between gap-4 ">
                         <span>{"Amount"}</span>

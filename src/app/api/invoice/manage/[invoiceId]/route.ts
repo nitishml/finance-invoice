@@ -1,5 +1,5 @@
 import { db } from "@/db/drizzle";
-import { contact, invoice, invoiceItem } from "@/db/schema";
+import { contact, contactCategoryEnum, invoice, invoiceItem } from "@/db/schema";
 import { getSession } from "@/features/auth/get-session";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
@@ -28,6 +28,10 @@ export async function GET(
                 id: contact.id,
                 name: contact.name,
                 slug: contact.slug,
+                contactCategory: contact.category,
+
+                invoiceType: invoice.invoiceType,
+                invoiceCategory: invoice.invoiceCategory,
 
                 mobile: contact.mobile,
                 email: contact.email,

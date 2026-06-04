@@ -1,17 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { PaginationResponse } from "@/types/generic-props";
-import { ContactListItem } from "./types";
+import { GeneralLedgerListItem } from "../types";
 
 type ApiResponse = {
     success: boolean;
-    data: {
-        contacts: ContactListItem[],
-    } | null;
+    data: GeneralLedgerListItem[] | null;
     message?: string;
 }
 
-async function fetchContacts(): Promise<ApiResponse> {
-    const response = await fetch(`/api/contact`, {
+async function fetchGeneralLedger(): Promise<ApiResponse> {
+    const response = await fetch(`/api/transaction`, {
         method: 'GET',
         credentials: 'include',
         headers: {
@@ -28,10 +25,10 @@ async function fetchContacts(): Promise<ApiResponse> {
     return data
 }
 
-export function useGetContacts() {
+export function useGetGeneralLedger() {
     return useQuery({
-        queryKey: ['contacts'],
-        queryFn: () => fetchContacts(),
+        queryKey: ['general-ledger'],
+        queryFn: () => fetchGeneralLedger(),
         retry: (failureCount, error) => {
             if (error.message.includes('401') || error.message.includes('403')) {
                 return false;
