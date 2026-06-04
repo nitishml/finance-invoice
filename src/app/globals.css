@@ -162,3 +162,16 @@
     @apply font-sans;
   }
 }
+
+/* Fallback for older browsers */
+html {
+  overflow-y: scroll;
+}
+
+/* Modern browsers - overrides the above with a cleaner solution */
+@supports (scrollbar-gutter: stable) {
+  html {
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+  }
+}

@@ -6,6 +6,7 @@ import {
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
+    getPaginationRowModel,
     getSortedRowModel,
     useReactTable,
 } from "@tanstack/react-table"
@@ -26,17 +27,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ContactListItem } from "./types"
 import { format } from "date-fns"
 import { cn, formatRupees, } from "@/lib/utils"
+import { Input } from "@/components/ui/input"
 
 interface Props {
     contacts: ContactListItem[];
-    total: number;
-    page: number
-    limit: number
-    setPage: (page: number) => void
-    setLimit: (limit: number) => void
 }
 
-export function ContactsTable({ contacts, total, page, limit, setPage, setLimit }: Props) {
+export function ContactsTable({ contacts }: Props) {
+    const [rowSelection, setRowSelection] = React.useState({})
+    const [pagination, setPagination] = React.useState({
+        pageIndex: 0, // TanStack is 0-based natively now, no conversion needed
+        pageSize: 25,
+    })
 
     const data = React.useMemo<ContactListItem[]>(
         () =>
@@ -96,31 +98,37 @@ export function ContactsTable({ contacts, total, page, limit, setPage, setLimit 
     const table = useReactTable({
         data,
         columns,
-        pageCount: Math.ceil(total / limit), // Calculate total pages from server
         state: {
+            rowSelection,
             pagination: {
-                pageIndex: page - 1, // TanStack uses 0-based index
-                pageSize: limit,
+                pageIndex: pagination.pageIndex,
+                pageSize: pagination.pageSize,
             },
         },
-        getRowId: row => row.id, // important: ensures row.id is used for selection
-        onPaginationChange: (updater) => {
-            const newState = typeof updater === 'function'
-                ? updater({ pageIndex: page - 1, pageSize: limit })
-                : updater
-
-            setPage(newState.pageIndex + 1) // Convert back to 1-based
-            setLimit(newState.pageSize)
-        },
-        manualPagination: true, // KEY: Enable server-side pagination
+        getRowId: row => row.id,
+        onPaginationChange: setPagination, // just pass the setter directly
+        // manualPagination: false is the default, so just remove it
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
         getFilteredRowModel: getFilteredRowModel(),
-        // Remove getPaginationRowModel() for server-side pagination
+        getPaginationRowModel: getPaginationRowModel(), // add this
     })
 
     return (
         <div className="rounded-3xl w-full border border-muted-foreground p-4 max-w-7xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <Input
+                    placeholder="Search name..."
+                    value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+                    onChange={(event) =>
+                        table.getColumn("name")?.setFilterValue(event.target.value)
+                    }
+                    type="search"
+                    className="max-w-sm"
+                />
+
+
+            </div>
             <div className="flex flex-col lg:flex-row items-center justify-between px-2 py-4">
                 <div className="flex items-center space-x-2">
                     <p className="text-sm font-medium">Rows per page</p>

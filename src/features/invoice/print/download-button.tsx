@@ -53,7 +53,7 @@ export function DownloadPdfButton({ invoiceId, filename }: DownloadPdfButtonProp
         <Button
             onClick={handleDownload}
             disabled={status === 'loading'}
-            className="..."
+            className="h-12 w-[250px]"
             size={'lg'}
         >
             <Download />

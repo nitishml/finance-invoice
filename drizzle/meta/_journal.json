@@ -85,6 +85,20 @@
       "when": 1780142370811,
       "tag": "20260530115930_silent_gateway",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1780559198568,
+      "tag": "20260604074638_bright_bedlam",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1780564008308,
+      "tag": "20260604090648_tan_lady_vermin",
+      "breakpoints": true
     }
   ]
 }

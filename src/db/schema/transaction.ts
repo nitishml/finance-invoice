@@ -15,9 +15,6 @@ export const transaction = pgTable("transaction", {
     transactionSerial: integer("transaction_serial").notNull(), //used to fetch the next number and sorting
 
     amount: integer("amount").notNull().default(0), //in paisa
-    cgst: integer("cgst").notNull().default(0), //in paisa
-    sgst: integer("sgst").notNull().default(0), //in paisa
-    total: integer("total").notNull().default(0), //in paisa
 
     transactionDate: date('transaction_date', { mode: 'date' }).notNull().defaultNow(),
 

@@ -1,4 +1,4 @@
-import { invoiceTypeEnum, invoiceCategoryEnum, invoiceStatusEnum } from "@/db/schema";
+import { invoiceTypeEnum, invoiceCategoryEnum, invoiceStatusEnum, contactCategoryEnum } from "@/db/schema";
 import * as z from "zod";
 
 export type AddInvoiceDTO = {
@@ -57,6 +57,7 @@ export type InvoiceDetails = {
 
     name: string;
     slug: string;
+    contactCategory: typeof contactCategoryEnum.enumValues[number];
     mobile: string;
     email: string;
     gstin: string | null;

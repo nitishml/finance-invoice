@@ -13,7 +13,7 @@ import {
     useSidebar,
 } from "@/components/ui/sidebar"
 import Image from "next/image"
-import { FileText, Home, LifeBuoy, FileChartPie, UsersRound, MailCheck } from "lucide-react"
+import { FileText, Home, LifeBuoy, FileChartPie, UsersRound, MailCheck, Scale } from "lucide-react"
 import { SidebarModeToggle } from "@/components/mode-toggle"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -36,9 +36,9 @@ const routes = [
         icon: UsersRound
     },
     {
-        title: "Quotations",
-        url: `/quotations`,
-        icon: MailCheck
+        title: "Accounting",
+        url: `/accounting`,
+        icon: Scale
     },
     {
         title: "Statements",
