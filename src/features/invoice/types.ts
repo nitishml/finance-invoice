@@ -1,9 +1,9 @@
-import { accountEnum, invoiceCategoryEnum, invoiceStatusEnum } from "@/db/schema";
+import { invoiceTypeEnum, invoiceCategoryEnum, invoiceStatusEnum } from "@/db/schema";
 import * as z from "zod";
 
 export type AddInvoiceDTO = {
     contactId: string;
-    account: typeof accountEnum.enumValues[number];
+    invoiceType: typeof invoiceTypeEnum.enumValues[number];
     invoiceNumber: string;
     invoiceSerial: number;
     invoiceDate: Date | string;
@@ -18,7 +18,7 @@ export const addInvoiceFormSchema = z.object({
 
 export const addInvoiceApiSchema = z.object({
     contactId: z.string(),
-    account: z.enum(accountEnum.enumValues),
+    invoiceType: z.enum(invoiceTypeEnum.enumValues),
 
     invoiceNumber: z.string(),
     invoiceSerial: z.coerce.number(),
@@ -29,7 +29,7 @@ export const addInvoiceApiSchema = z.object({
 
 export type InvoiceListItem = {
     id: string;
-    account: typeof accountEnum.enumValues[number];
+    invoiceType: typeof invoiceTypeEnum.enumValues[number];
     status: typeof invoiceStatusEnum.enumValues[number];
     invoiceNumber: string;
 
@@ -46,7 +46,7 @@ export type InvoiceListItem = {
 export type InvoiceDetails = {
     id: string;
 
-    account: typeof accountEnum.enumValues[number];
+    invoiceType: typeof invoiceTypeEnum.enumValues[number];
     status: typeof invoiceStatusEnum.enumValues[number];
     invoiceNumber: string;
 
@@ -100,7 +100,7 @@ export type DraftInvoiceDetails = {
     invoice: {
         id: string;
 
-        account: typeof accountEnum.enumValues[number];
+        invoiceType: typeof invoiceTypeEnum.enumValues[number];
         status: typeof invoiceStatusEnum.enumValues[number];
         invoiceNumber: string;
 

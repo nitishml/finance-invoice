@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { account, user } from "@/db/schema";
+import { user } from "@/db/schema";
 import { db } from "@/db/drizzle";
 import { hashPassword } from "@/features/auth/session-utils";
 
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
         }, { status: 400 });
 
         const { mobile, name, email, password } = validatedData.data
-
+        const hashed = await hashPassword(password);
         const [newUser] = await db
             .insert(user)
             .values({
@@ -33,6 +33,7 @@ export async function POST(request: NextRequest) {
                 mobile,
                 email,
                 isActive: true,
+                hashedPassword: hashed
             })
             .returning({
                 id: user.id
@@ -43,15 +44,6 @@ export async function POST(request: NextRequest) {
             message: "Signup Failed",
             data: null,
         }, { status: 404 });
-
-        const hashed = await hashPassword(password);
-
-        await db
-            .insert(account)
-            .values({
-                userId: newUser.id,
-                hashedPassword: hashed
-            })
 
         return NextResponse.json(
             {

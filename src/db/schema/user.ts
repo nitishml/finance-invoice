@@ -9,6 +9,8 @@ export const user = pgTable("user", {
     email: text("email").notNull().unique(),
 
     isActive: boolean("is_active").notNull(),
+    hashedPassword: text("hashed_password"),
+
 
     createdAt: timestamp('created_at', { mode: 'date', withTimezone: true })
         .notNull()

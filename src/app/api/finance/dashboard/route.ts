@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
             .select({ expenseCount: count() })
             .from(invoice)
             .where(and(
-                eq(invoice.account, "EXPENSE"),
+                eq(invoice.invoiceType, "EXPENSE"),
                 eq(invoice.status, "PAID")
             ));
 
@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
             .select({ expenseTotal: sum(invoice.total) })
             .from(invoice)
             .where(and(
-                eq(invoice.account, "EXPENSE"),
+                eq(invoice.invoiceType, "EXPENSE"),
                 eq(invoice.status, "PAID")
             ));
 
@@ -37,7 +37,7 @@ export async function GET(request: NextRequest) {
             .select({ incomeCount: count() })
             .from(invoice)
             .where(and(
-                eq(invoice.account, "INCOME"),
+                eq(invoice.invoiceType, "INCOME"),
                 eq(invoice.status, "PAID")
             ));
 
@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
             .select({ incomeTotal: sum(invoice.total) })
             .from(invoice)
             .where(and(
-                eq(invoice.account, "INCOME"),
+                eq(invoice.invoiceType, "INCOME"),
                 eq(invoice.status, "PAID")
             ));
 
@@ -57,7 +57,7 @@ export async function GET(request: NextRequest) {
             .from(invoice)
             .where(
                 and(
-                    eq(invoice.account, "INCOME"),
+                    eq(invoice.invoiceType, "INCOME"),
                     eq(invoice.status, "EXPECTED"),
                     gte(invoice.dueDate, startOfMonth),
                     lt(invoice.dueDate, startOfNextMonth)
@@ -72,7 +72,7 @@ export async function GET(request: NextRequest) {
             .from(invoice)
             .where(
                 and(
-                    eq(invoice.account, "EXPENSE"),
+                    eq(invoice.invoiceType, "EXPENSE"),
                     eq(invoice.status, "EXPECTED"),
                     gte(invoice.dueDate, startOfMonth),
                     lt(invoice.dueDate, startOfNextMonth)

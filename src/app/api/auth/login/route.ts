@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies, headers } from "next/headers";
 import { z } from "zod";
 import { db } from "@/db/drizzle";
-import { account, session, user } from "@/db/schema";
+import { session, user } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 import { generateSessionToken, SESSION_COOKIE, TTL_SECONDS, verifyPassword } from "@/features/auth/session-utils";
 // import { getRequestMetadata } from "@/features/auth/header-utils";
@@ -29,14 +29,13 @@ export async function POST(request: NextRequest) {
         const [userData] = await db
             .select({
                 id: user.id,
-                hashedPassword: account.hashedPassword
+                hashedPassword: user.hashedPassword
             })
             .from(user)
             .where(and(
                 eq(user.mobile, mobile),
                 eq(user.isActive, true)
             ))
-            .innerJoin(account, eq(account.userId, user.id),)
 
         if (!userData || !userData.hashedPassword) return NextResponse.json({
             success: false,

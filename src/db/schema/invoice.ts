@@ -1,6 +1,6 @@
 import { relations } from "drizzle-orm";
 import { boolean, date, index, integer, pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
-import { user, accountEnum, invoiceStatusEnum, invoiceItem, contact, invoiceCategoryEnum } from "./";
+import { user, invoiceTypeEnum, invoiceStatusEnum, invoiceItem, contact, invoiceCategoryEnum } from "./";
 import { createId } from "@/lib/nanoid-gen";
 
 // invoice number config: GS{serial}-A
@@ -10,7 +10,7 @@ export const invoice = pgTable("invoice", {
     handledBy: text("handled_by").notNull().references(() => user.id),
     contactId: text("contact_id").notNull().references(() => contact.id),
 
-    account: accountEnum("account").notNull(),
+    invoiceType: invoiceTypeEnum("invoice_type").notNull(),
     status: invoiceStatusEnum("status").notNull(),
     invoiceNumber: text("invoice_number").notNull(),
     invoiceSerial: integer("invoice_serial").notNull(), //used to fetch the next number
@@ -43,7 +43,7 @@ export const invoice = pgTable("invoice", {
 }, (table) => [
     index("idx_inv_contact").on(table.contactId),
     index("idx_inv_no").on(table.invoiceNumber),
-    index("idx_inv_account").on(table.account),
+    index("idx_inv_type").on(table.invoiceType),
     index("idx_inv_status").on(table.status),
 
     // date columns
