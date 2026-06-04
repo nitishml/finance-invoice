@@ -64,6 +64,27 @@
       "when": 1779299799133,
       "tag": "20260520175639_careless_nemesis",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1780140480789,
+      "tag": "20260530112800_black_supernaut",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1780141172908,
+      "tag": "20260530113932_strong_killraven",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1780142370811,
+      "tag": "20260530115930_silent_gateway",
+      "breakpoints": true
     }
   ]
 }

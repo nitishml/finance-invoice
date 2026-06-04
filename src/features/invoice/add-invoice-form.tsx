@@ -23,7 +23,7 @@ import { InPageHeader } from "@/components/layout/in-page-header"
 import { QueryLoading } from "@/components/custom-loaders"
 import { addInvoiceFormSchema } from "./types"
 import { useAddInvoice } from "./useAddInvoice"
-import { AccountToggle } from "./account-toggle"
+import { InvoiceTypeToggle } from "./account-toggle"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Calendar } from "@/components/ui/calendar"
 import { cn, extractInvoiceSerial } from "@/lib/utils"
@@ -37,7 +37,7 @@ type Props = {
 export function AddInvoiceForm({ contactId }: Props) {
     const mutation = useAddInvoice()
     const [isLoading, setLoading] = useState(false)
-    const [account, setAccount] = useState<"INCOME" | "EXPENSE">("INCOME")
+    const [invoiceType, setInvoiceType] = useState<"INCOME" | "EXPENSE">("INCOME")
     const [invoiceNumber, setInvoiceNumber] = useState<string | null>(null)
 
     const router = useRouter()
@@ -55,7 +55,7 @@ export function AddInvoiceForm({ contactId }: Props) {
 
         setLoading(true)
         mutation.mutate({
-            account,
+            invoiceType,
             contactId: contactId,
             description: values.description,
             invoiceDate: values.invoiceDate,
@@ -84,7 +84,7 @@ export function AddInvoiceForm({ contactId }: Props) {
         <div className="w-full flex-1 flex flex-col gap-8 items-start justify-center">
             <InPageHeader label="Add Invoice Form" />
             <form onSubmit={form.handleSubmit(onSubmit)} className=" max-w-6xl  w-full mx-auto space-y-4">
-                <AccountToggle account={account} setAccount={setAccount} />
+                <InvoiceTypeToggle invoiceType={invoiceType} setInvoiceType={setInvoiceType} />
 
                 <FieldGroup className={cn("w-full max-w-lg mx-auto p-4 mb border rounded-md",
                     invoiceNumber ? " border-emerald-500" : " border-rose-500"

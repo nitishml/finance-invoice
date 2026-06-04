@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
                 .select({
                     id: invoice.id,
                     status: invoice.status,
-                    account: invoice.account,
+                    invoiceType: invoice.invoiceType,
                     invoiceNumber: invoice.invoiceNumber,
 
                     total: invoice.total,
@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
             .values({
                 contactId: values.contactId,
                 handledBy: session.userId,
-                account: values.account,
+                invoiceType: values.invoiceType,
 
                 invoiceNumber: values.invoiceNumber,
                 invoiceSerial: values.invoiceSerial,
