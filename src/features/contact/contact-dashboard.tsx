@@ -57,21 +57,18 @@ export const ContactDashboard = () => {
                         <Users />
                     </StatIndicator>
                 </Stat>
-                <div className="flex flex-col items-center justify-center gap-1">
-                    <Button variant={'outline'} className="w-full h-12">
-                        <Download />
-                        Export CSV
-                    </Button>
-                    <Button className="w-full h-14" asChild>
-                        <Link href={`/contacts/add`}>
-                            <UserPlus />
-                            Add Contact
-                        </Link>
-                    </Button>
-                </div>
-                <Stat>
-
-                </Stat>
+            </div>
+            <div className="flex flex-col md:flex-row items-center justify-center gap-1">
+                <Button variant={'outline'} className="w-[200px] h-12">
+                    <Download />
+                    Export CSV
+                </Button>
+                <Button className="w-[200px] h-12" asChild>
+                    <Link href={`/contacts/add`}>
+                        <UserPlus />
+                        Add Contact
+                    </Link>
+                </Button>
             </div>
             <ContactsTable
                 contacts={data.contacts}

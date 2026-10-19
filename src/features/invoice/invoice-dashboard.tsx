@@ -1,17 +1,9 @@
 "use client"
 import { DataError, QueryLoading } from "@/components/custom-loaders";
 import { parseAsInteger, useQueryState } from "nuqs";
-import {
-    Stat,
-    StatIndicator,
-    StatLabel,
-    StatValue,
-} from "@/components/ui/stat";
-import { Download, UserPlus, Users } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import { useGetInvoices } from "./useGetInvoices";
 import { InvoicesTable } from "./invoices-table";
+import { InvoiceStats } from "./invoice-stats";
 
 export const InvoiceDashboard = () => {
     const [page, setPage] = useQueryState('page', parseAsInteger.withDefault(1))
@@ -30,24 +22,7 @@ export const InvoiceDashboard = () => {
     const data = query.data.data
     return (
         <div className="w-full space-y-4">
-            <div className="w-full grid grid-cols-1 md:grid-cols-2  gap-6 items-end">
-                <Stat>
-                    <StatLabel>Total</StatLabel>
-                    <StatValue>{data.pagination.total}</StatValue>
-                    <StatIndicator variant="icon" color="success">
-                        <Users />
-                    </StatIndicator>
-                </Stat>
-                <div className="flex flex-col items-center justify-center gap-1">
-
-                    <Button className="w-full h-14" asChild>
-                        <Link href={`/invoices/add`}>
-                            <UserPlus />
-                            Add Invoice
-                        </Link>
-                    </Button>
-                </div>
-            </div>
+            <InvoiceStats />
             <InvoicesTable
                 invoices={data.invoices}
                 total={data.pagination.total}
