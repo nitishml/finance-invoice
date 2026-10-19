@@ -84,6 +84,7 @@ export type InvoiceDetails = {
         order: number;
         title: string;
         description: string | null;
+        txnId: string | null;
         rate: number;
         quantity: number;
         amount: number;

@@ -55,6 +55,7 @@ export async function GET(
                 total: invoice.total,
 
                 dueDate: invoice.dueDate,
+                paymentDate: invoice.paymentDate,
                 status: invoice.status,
             })
             .from(invoice)
