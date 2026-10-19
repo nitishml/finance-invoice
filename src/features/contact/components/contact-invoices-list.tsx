@@ -165,19 +165,7 @@ function ContactsTable({ contacts }: { contacts: ContactInvoiceListItem[] }) {
 
     return (
         <div className="rounded-3xl w-full border border-muted-foreground p-4 max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Input
-                    placeholder="Search name..."
-                    value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-                    onChange={(event) =>
-                        table.getColumn("name")?.setFilterValue(event.target.value)
-                    }
-                    type="search"
-                    className="max-w-sm"
-                />
 
-
-            </div>
             <div className="flex flex-col lg:flex-row items-center justify-between px-2 py-4">
                 <div className="flex items-center space-x-2">
                     <p className="text-sm font-medium">Rows per page</p>

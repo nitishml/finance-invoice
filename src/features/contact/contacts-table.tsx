@@ -11,23 +11,20 @@ import {
     useReactTable,
 } from "@tanstack/react-table"
 import {
-    BanknoteArrowDown,
     ChevronLeft,
     ChevronRight,
     ChevronsLeft,
     ChevronsRight,
-    Eye,
-    FileCheck,
+    Delete,
 } from "lucide-react"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
-import { ArrowUpDown, Edit } from "lucide-react"
+import { Edit } from "lucide-react"
 import Link from "next/link"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ContactListItem } from "./types"
-import { format } from "date-fns"
-import { cn, formatRupees, } from "@/lib/utils"
 import { Input } from "@/components/ui/input"
+import { contactCategoryEnum } from "@/db/schema"
 
 interface Props {
     contacts: ContactListItem[];
@@ -39,6 +36,7 @@ export function ContactsTable({ contacts }: Props) {
         pageIndex: 0, // TanStack is 0-based natively now, no conversion needed
         pageSize: 25,
     })
+
 
     const data = React.useMemo<ContactListItem[]>(
         () =>
@@ -58,6 +56,13 @@ export function ContactsTable({ contacts }: Props) {
                     <p className="font-semibold text-sm">{row.original.slug}</p>
                 </div>
             ),
+        },
+        {
+            accessorKey: "slug",
+            meta: {
+                headerClassName: "hidden",
+                cellClassName: "hidden",
+            },
         },
         {
             accessorKey: "mobile",
@@ -116,18 +121,56 @@ export function ContactsTable({ contacts }: Props) {
 
     return (
         <div className="rounded-3xl w-full border border-muted-foreground p-4 max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Input
-                    placeholder="Search name..."
-                    value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-                    onChange={(event) =>
-                        table.getColumn("name")?.setFilterValue(event.target.value)
-                    }
-                    type="search"
-                    className="max-w-sm"
-                />
-
-
+            <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+                <div className="grid grid-cols-1 md:grid-cols-3 flex-1 gap-4">
+                    <Input
+                        placeholder="Search name..."
+                        value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+                        onChange={(event) =>
+                            table.getColumn("name")?.setFilterValue(event.target.value)
+                        }
+                        type="search"
+                        className="max-w-sm"
+                    />
+                    <Input
+                        placeholder="Search slug..."
+                        value={(table.getColumn("slug")?.getFilterValue() as string) ?? ""}
+                        onChange={(event) =>
+                            table.getColumn("slug")?.setFilterValue(event.target.value)
+                        }
+                        type="search"
+                        className="max-w-sm"
+                    />
+                    <Select
+                        value={(table.getColumn("category")?.getFilterValue() as string) ?? ""}
+                        onValueChange={(event) =>
+                            table.getColumn("category")?.setFilterValue(event)
+                        }
+                    >
+                        <SelectTrigger className=" w-full">
+                            <SelectValue placeholder="Category" />
+                        </SelectTrigger>
+                        <SelectContent >
+                            <SelectGroup>
+                                {contactCategoryEnum.enumValues.map((item) => (
+                                    <SelectItem key={item} value={item}>
+                                        {item}
+                                    </SelectItem>
+                                ))}
+                            </SelectGroup>
+                        </SelectContent>
+                    </Select>
+                </div>
+                <Button
+                    onClick={() => {
+                        table.getColumn("name")?.setFilterValue(undefined)
+                        table.getColumn("slug")?.setFilterValue(undefined)
+                        table.getColumn("category")?.setFilterValue(undefined)
+                    }}
+                    variant={'destructive'}
+                >
+                    <Delete /> Clear
+                </Button>
             </div>
             <div className="flex flex-col lg:flex-row items-center justify-between px-2 py-4">
                 <div className="flex items-center space-x-2">
@@ -200,13 +243,16 @@ export function ContactsTable({ contacts }: Props) {
                 </div>
             </div>
             {/* Table */}
-            <div className="overflow-x-auto rounded-lg ">
+            <div className="overflow-x-auto rounded-lg border">
                 <Table>
                     <TableHeader>
                         {table.getHeaderGroups().map(headerGroup => (
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map(header => (
-                                    <TableHead key={header.id}>
+                                    <TableHead
+                                        key={header.id}
+                                        className={header.column.columnDef.meta?.headerClassName}
+                                    >
                                         {header.isPlaceholder
                                             ? null
                                             : flexRender(header.column.columnDef.header, header.getContext())}
@@ -223,7 +269,10 @@ export function ContactsTable({ contacts }: Props) {
                                     className={row.getIsSelected() ? "bg-blue-50" : ""}
                                 >
                                     {row.getVisibleCells().map(cell => (
-                                        <TableCell key={cell.id}>
+                                        <TableCell
+                                            key={cell.id}
+                                            className={cell.column.columnDef.meta?.cellClassName}
+                                        >
                                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                         </TableCell>
                                     ))}

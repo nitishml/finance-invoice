@@ -128,3 +128,11 @@ export type ContactInvoiceListItem = {
     invoiceCategory: typeof invoiceCategoryEnum.enumValues[number] | null;
 
 }
+
+export type ContactAnalyticsDTO = {
+    // expenseCount: number;
+    // incomeCount: number;
+    total: number;
+    expenseTotal: number;
+    incomeTotal: number;
+}
