@@ -55,6 +55,16 @@ export const InvoiceDetails = ({ invoiceId }: Props) => {
                             {format(data.dueDate, "MMMM dd, yyyy")}
                         </p>
                     </div>
+                    {data.paymentDate && (
+                        <div className="w-full flex items-center justify-start gap-4">
+                            <p className="w-[150px]">
+                                {"Paid Date"}
+                            </p>
+                            <p className="font-bold">
+                                {format(data.paymentDate, "MMMM dd, yyyy")}
+                            </p>
+                        </div>
+                    )}
                     <div className="w-full flex items-center justify-start gap-4">
                         <p className="w-[150px]">
                             {"Status"}
@@ -104,18 +114,6 @@ export const InvoiceDetails = ({ invoiceId }: Props) => {
 
 
                     <div className="w-full  items-stretch justify-between gap-4">
-                        {/* <Card className="p-4 bg-custom-secondary-200  rounded-sm">
-                    <div className="w-full flex flex-col items-start justify-center">
-                        <h2 className="text-xl font-bold">Billed By</h2>
-
-                        <p className="font-bold text-base">{"Growsharp Technologies PVT LTD"}</p>
-                        <p>{"616, Outer Ring Rd, 7 Block, CG Chinnappa Naidu"}</p>
-                        <p>{"Layout, Banashankari 3rd Stage, Banashankari,"}</p>
-                        <p>{"Bengaluru" + ", " + "Karnataka"}</p>
-                        <p>{"India" + " - " + "560085"}</p>
-
-                    </div>
-                </Card> */}
 
                         <Card className="p-4 bg-custom-secondary-200  rounded-sm">
                             <div className="w-full flex flex-col items-start justify-center">
@@ -130,48 +128,53 @@ export const InvoiceDetails = ({ invoiceId }: Props) => {
                             </div>
                         </Card>
                     </div>
-
+                    <div className="w-full flex flex-col items-end justify-between gap-4">
+                        <DownloadPdfButton invoiceId={invoiceId} />
+                        <Button
+                            className="h-12 w-[250px]"
+                            size={'lg'}
+                            asChild
+                        >
+                            <Link href={`/invoices/manage/${invoiceId}/journal-entry`}>
+                                <PlusSquare />
+                                Make Journal Entry
+                            </Link>
+                        </Button>
+                    </div>
                 </div>
             </div>
-            <div className="w-full flex items-center justify-between gap-4">
-                <DownloadPdfButton invoiceId={invoiceId} />
-                <Button
-                    className="h-12 w-[250px]"
-                    size={'lg'}
-                    asChild
-                >
-                    <Link href={`/invoices/manage/${invoiceId}/journal-entry`}>
-                        <PlusSquare />
-                        Make Journal Entry
-                    </Link>
-                </Button>
-            </div>
+
 
             <div className="w-full flex flex-col items-start justify-between gap-4 bg-custom-secondary-400 rounded-md pb-2">
                 <div className="w-full flex items-center justify-start gap-4 bg-custom-secondary-600 text-white px-4 py-2 rounded-t-md">
                     <p className="w-4"></p>
                     <p className="flex-1">Item</p>
-                    <p className="w-12">GST Rate</p>
                     <p className="w-20">Quantity</p>
                     <p className="w-30">Rate</p>
                     <p className="w-30">Amount</p>
                     <p className="w-25">CGST</p>
                     <p className="w-25">SGST</p>
-                    <p className="w-35">Total</p>
+
                 </div>
                 {data.items.map((item) => (
                     <div
                         key={item.id}
-                        className="w-full flex items-center justify-start gap-4  text-white px-4 py-2 ">
-                        <p className="w-4">{item.order}</p>
-                        <p className="flex-1">{item.title}</p>
-                        <p className="w-12">{item.gstRatio + "%"}</p>
-                        <p className="w-20 text-center">{item.quantity}</p>
-                        <p className="w-30">{formatRupees(item.rate)}</p>
-                        <p className="w-30">{formatRupees(item.amount)}</p>
-                        <p className="w-25">{formatRupees(item.cgstAmount)}</p>
-                        <p className="w-25">{formatRupees(item.sgstAmount)}</p>
-                        <p className="w-35">{formatRupees(item.total)}</p>
+                        className="w-full flex flex-col items-start justify-center">
+                        <div className="w-full flex items-center justify-start gap-4  text-white px-4 py-2 ">
+                            <p className="w-4">{item.order}</p>
+                            <p className="flex-1">{item.title}</p>
+                            <p className="w-20 text-center">{item.quantity}</p>
+                            <p className="w-30">{formatRupees(item.rate)}</p>
+                            <p className="w-30">{formatRupees(item.amount)}</p>
+                            <p className="w-25">{formatRupees(item.cgstAmount)}</p>
+                            <p className="w-25">{formatRupees(item.sgstAmount)}</p>
+                        </div>
+                        <div className="w-full flex items-center justify-start gap-4  text-white px-4 py-2 ">
+                            <p className="w-4"></p>
+                            <p className="flex-1">{item.description}</p>
+                            <p className="flex-1">{"TX:" + item.txnId}</p>
+                            <p className="w-35">{"Total: " + formatRupees(item.total)}</p>
+                        </div>
                     </div>
                 ))}
             </div>

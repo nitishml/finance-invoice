@@ -84,6 +84,7 @@ export type InvoiceDetails = {
         order: number;
         title: string;
         description: string | null;
+        txnId: string | null;
         rate: number;
         quantity: number;
         amount: number;
@@ -196,3 +197,11 @@ export const publishInvoiceApiSchema = z.object({
     expectedPaymentDate: z.coerce.date(),
     remarks: z.string().optional()
 })
+
+export type InvoiceStatsDTO = {
+    total: number;
+    expenseCount: number;
+    incomeCount: number;
+    // expenseTotal: string;
+    // incomeTotal: string;
+}

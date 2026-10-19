@@ -45,7 +45,7 @@ export function AddInvoiceForm({ contactId }: Props) {
     const form = useForm<z.infer<typeof addInvoiceFormSchema>>({
         resolver: zodResolver(addInvoiceFormSchema) as any,
         defaultValues: {
-            invoiceDate: format(new Date("02-02-2025"), "yyyy-MM-dd"),
+            invoiceDate: format(new Date("03-03-2025"), "yyyy-MM-dd"),
         }
     })
 

@@ -1,8 +1,6 @@
 "use client"
-import { Page } from "@/components/layout/page";
 import { Card } from '@/components/ui/card';
 import { AspectRatio } from '@radix-ui/react-aspect-ratio';
-import { format } from "date-fns";
 import { DataDisplay, SoftDataDisplay } from "@/components/data-display";
 import { DataError, QueryLoading } from "@/components/custom-loaders";
 import { useGetContactDetails } from "./useGetContactDetails";
