@@ -1,4 +1,4 @@
-import { contactCategoryEnum, invoiceCategoryEnum } from "@/db/schema";
+import { contactCategoryEnum, invoiceCategoryEnum, invoiceStatusEnum, invoiceTypeEnum } from "@/db/schema";
 import * as z from "zod";
 
 export type AddContactDTO = {
@@ -112,4 +112,19 @@ export type ContactSearchListItem = {
     slug: string;
     mobile: string;
     city: string;
+}
+
+export type ContactInvoiceListItem = {
+    id: string;
+    invoiceType: typeof invoiceTypeEnum.enumValues[number];
+    status: typeof invoiceStatusEnum.enumValues[number];
+    invoiceNumber: string;
+
+    total: number;
+    description: string | null;
+
+    dueDate: Date;
+    paymentDate: Date | null;
+    invoiceCategory: typeof invoiceCategoryEnum.enumValues[number] | null;
+
 }
