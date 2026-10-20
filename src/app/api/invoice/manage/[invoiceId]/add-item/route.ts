@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { invoice, invoiceItem } from "@/db/schema";
 import { getSession } from "@/features/auth/get-session";
 import { addItemApiSchema } from "@/features/invoice-item/types";
+import { rupeesToPaise } from "@/lib/utils";
 
 export async function POST(
     request: NextRequest,
@@ -45,18 +46,18 @@ export async function POST(
                 description: values.description,
                 txnId: values.txnId,
 
-                rate: values.rate * 100,
+                rate: rupeesToPaise(values.rate),
                 quantity: values.quantity,
-                amount: values.rate * 100 * values.quantity,
-                gstAmount: values.gstAmount * 100,
+                amount: rupeesToPaise(values.rate) * values.quantity,
+                gstAmount: rupeesToPaise(values.gstAmount),
                 gstRatio: values.gstRatio,
-                cgstAmount: values.cgstAmount * 100,
+                cgstAmount: rupeesToPaise(values.cgstAmount),
                 cgstRatio: values.cgstRatio,
-                sgstAmount: values.sgstAmount * 100,
+                sgstAmount: rupeesToPaise(values.sgstAmount),
                 sgstRatio: values.sgstRatio,
                 isSymmetricGst: values.isSymmetricGst,
 
-                total: values.total * 100,
+                total: rupeesToPaise(values.total),
             })
             .returning({
                 id: invoiceItem.id
@@ -71,10 +72,10 @@ export async function POST(
         await db
             .update(invoice)
             .set({
-                amount: sql`${invoice.amount} + ${values.rate * 100 * values.quantity}`,
-                cgst: sql`${invoice.cgst} + ${values.cgstAmount * 100}`,
-                sgst: sql`${invoice.sgst} + ${values.sgstAmount * 100}`,
-                total: sql`${invoice.total} + ${values.total * 100}`,
+                amount: sql`${invoice.amount} + ${rupeesToPaise(values.rate) * values.quantity}`,
+                cgst: sql`${invoice.cgst} + ${rupeesToPaise(values.cgstAmount)}`,
+                sgst: sql`${invoice.sgst} + ${rupeesToPaise(values.sgstAmount)}`,
+                total: sql`${invoice.total} + ${rupeesToPaise(values.total)}`,
             })
             .where(eq(invoice.id, invoiceId))
 

@@ -70,6 +70,7 @@ export function AddItemForm({ invoiceId, itemLength }: Props) {
             sgstRatio: values.gstRatio / 2,
             isSymmetricGst: symmetricGst,
             total: f_total,
+            txnId: values.txnId,
         }, {
             onSuccess: (data) => {
                 if (data.success && data.data) {
