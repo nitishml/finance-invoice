@@ -5,8 +5,13 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function rupeesToPaisa(amount: number): number {
-  return Math.round(amount * 100);
+export function rupeesToPaise(input: string | number): number {
+  const str = String(input).trim();
+  if (!/^\d+(\.\d{1,2})?$/.test(str)) {
+    throw new Error(`Invalid rupee amount: ${str}`);
+  }
+  const [rupees, decimals = ""] = str.split(".");
+  return Number(rupees) * 100 + Number(decimals.padEnd(2, "0"));
 }
 
 export function paisaToRupees(amount: number): number {
